@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on 念去去云的博文</title>
+    <link>http://www.1move.life/tags/</link>
+    <description>Recent content in Tags on 念去去云的博文</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 26 Nov 2017 13:47:08 +0200</lastBuildDate>
+    
+	<atom:link href="http://www.1move.life/tags/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Idea</title>
+      <link>http://www.1move.life/tags/idea/</link>
+      <pubDate>Sun, 26 Nov 2017 13:47:08 +0200</pubDate>
+      
+      <guid>http://www.1move.life/tags/idea/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Java</title>
+      <link>http://www.1move.life/tags/java/</link>
+      <pubDate>Sun, 26 Nov 2017 13:47:08 +0200</pubDate>
+      
+      <guid>http://www.1move.life/tags/java/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Osx</title>
+      <link>http://www.1move.life/tags/osx/</link>
+      <pubDate>Sun, 26 Nov 2017 13:47:08 +0200</pubDate>
+      
+      <guid>http://www.1move.life/tags/osx/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Thymeleaf</title>
+      <link>http://www.1move.life/tags/thymeleaf/</link>
+      <pubDate>Sun, 26 Nov 2017 13:47:08 +0200</pubDate>
+      
+      <guid>http://www.1move.life/tags/thymeleaf/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>基础</title>
+      <link>http://www.1move.life/tags/%E5%9F%BA%E7%A1%80/</link>
+      <pubDate>Sun, 26 Nov 2017 13:47:08 +0200</pubDate>
+      
+      <guid>http://www.1move.life/tags/%E5%9F%BA%E7%A1%80/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>流氓广告</title>
+      <link>http://www.1move.life/tags/%E6%B5%81%E6%B0%93%E5%B9%BF%E5%91%8A/</link>
+      <pubDate>Sun, 26 Nov 2017 13:47:08 +0200</pubDate>
+      
+      <guid>http://www.1move.life/tags/%E6%B5%81%E6%B0%93%E5%B9%BF%E5%91%8A/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>翻译</title>
+      <link>http://www.1move.life/tags/%E7%BF%BB%E8%AF%91/</link>
+      <pubDate>Sun, 26 Nov 2017 13:47:08 +0200</pubDate>
+      
+      <guid>http://www.1move.life/tags/%E7%BF%BB%E8%AF%91/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

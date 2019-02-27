@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>技术文章s on 念去去云的博文</title>
+    <link>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/</link>
+    <description>Recent content in 技术文章s on 念去去云的博文</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 26 Nov 2017 13:47:08 +0200</lastBuildDate>
+    
+	<atom:link href="http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Jsoup  Html页面处理简单用法</title>
+      <link>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/jsoupjsoup-html%E9%A1%B5%E9%9D%A2%E5%A4%84%E7%90%86%E7%AE%80%E5%8D%95%E7%94%A8%E6%B3%95/</link>
+      <pubDate>Sun, 26 Nov 2017 13:47:08 +0200</pubDate>
+      
+      <guid>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/jsoupjsoup-html%E9%A1%B5%E9%9D%A2%E5%A4%84%E7%90%86%E7%AE%80%E5%8D%95%E7%94%A8%E6%B3%95/</guid>
+      <description>#[Jsoup Html页面处理简单用法] Jsoup工具可以把html文本映射为Dom对象，用更简单的操作html。 1. 从一个URL，文件或字符串中解析HT</description>
+    </item>
+    
+    <item>
+      <title>多Realm时，指定登录Realm</title>
+      <link>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/shiro%E5%A4%9Arealm%E6%97%B6%E6%8C%87%E5%AE%9A%E7%99%BB%E5%BD%95realm/</link>
+      <pubDate>Sun, 26 Nov 2017 13:47:08 +0200</pubDate>
+      
+      <guid>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/shiro%E5%A4%9Arealm%E6%97%B6%E6%8C%87%E5%AE%9A%E7%99%BB%E5%BD%95realm/</guid>
+      <description>[Shiro]多Realm时，指定登录Realm 之前写过多Realm登录前后台区分问题，实现了当时的需求，可是再下一步的时候，角色与权限校验</description>
+    </item>
+    
+    <item>
+      <title>类基本方法（toString、hashCode、equals、compareTo）重写</title>
+      <link>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/java%E5%9F%BA%E7%A1%80-bean%E7%B1%BB%E5%9F%BA%E6%9C%AC%E6%96%B9%E6%B3%95%E9%87%8D%E5%86%99/</link>
+      <pubDate>Sun, 26 Nov 2017 13:47:08 +0200</pubDate>
+      
+      <guid>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/java%E5%9F%BA%E7%A1%80-bean%E7%B1%BB%E5%9F%BA%E6%9C%AC%E6%96%B9%E6%B3%95%E9%87%8D%E5%86%99/</guid>
+      <description>类基本方法（toString、hashCode、equals、compareTo）重写 使用jar包为 apache的commons集lang包</description>
+    </item>
+    
+    <item>
+      <title>Github项目使用多CI构建指南</title>
+      <link>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/github%E9%A1%B9%E7%9B%AE%E4%BD%BF%E7%94%A8ci%E6%9E%84%E5%BB%BA%E6%8C%87%E5%8D%97/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/github%E9%A1%B9%E7%9B%AE%E4%BD%BF%E7%94%A8ci%E6%9E%84%E5%BB%BA%E6%8C%87%E5%8D%97/</guid>
+      <description>Github项目使用多CI构建指南 起因 我最近在捣鼓电子书，用python写了一个脚本转换工具，写的脚本为了使用方便，用pyinstaller</description>
+    </item>
+    
+    <item>
+      <title>Spring Data Jpa 查询关键字</title>
+      <link>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/spring-data-jpa-%E6%9F%A5%E8%AF%A2%E5%85%B3%E9%94%AE%E5%AD%97/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/spring-data-jpa-%E6%9F%A5%E8%AF%A2%E5%85%B3%E9%94%AE%E5%AD%97/</guid>
+      <description>Spring Data Jpa 查询关键字 find可以换成count、delete、get等等 关键字 示例 同功能JPQL And findByLastnameAndFirstname where x.lastname = ?1 and x.firstname = ?2 Or findByLastnameOrFirstname where x.lastname = ?1 or x.firstname = ?2 Is,Equals findByFirstname,findByFirstnameIs,findByFirstnameEquals where x.firstname</description>
+    </item>
+    
+    <item>
+      <title>[Shiro]-filter&amp;realm绑定--多登陆入口，区分前后台</title>
+      <link>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/shiro-filterrealm%E7%BB%91%E5%AE%9A-%E5%A4%9A%E7%99%BB%E9%99%86%E5%85%A5%E5%8F%A3%E5%8C%BA%E5%88%86%E5%89%8D%E5%90%8E%E5%8F%B0/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/shiro-filterrealm%E7%BB%91%E5%AE%9A-%E5%A4%9A%E7%99%BB%E9%99%86%E5%85%A5%E5%8F%A3%E5%8C%BA%E5%88%86%E5%89%8D%E5%90%8E%E5%8F%B0/</guid>
+      <description>Shiro框架 filter&amp;amp;realm绑定 这种实现方式有问题，会影响到后续的角色验证。不建议看了 新的实现方式 ： 自定义Token shiro fi</description>
+    </item>
+    
+    <item>
+      <title>[Shiro]Shiro整合Spring-Boot-自动化配置</title>
+      <link>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/shiroshiro%E6%95%B4%E5%90%88spring-boot-%E8%87%AA%E5%8A%A8%E5%8C%96%E9%85%8D%E7%BD%AE/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/shiroshiro%E6%95%B4%E5%90%88spring-boot-%E8%87%AA%E5%8A%A8%E5%8C%96%E9%85%8D%E7%BD%AE/</guid>
+      <description>Spring Boot 简化了spring大量的xml配置，使用了Java Config的配置，同时又提供了自动化配置工具。在引入新的组件时，只需要在配置文件上添</description>
+    </item>
+    
+    <item>
+      <title>jQuery表格插件DataTables  的服务器端参数解析工具</title>
+      <link>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/tooljquery%E8%A1%A8%E6%A0%BC%E6%8F%92%E4%BB%B6datatables-%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AB%AF%E5%8F%82%E6%95%B0%E8%A7%A3%E6%9E%90%E5%B7%A5%E5%85%B7/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/tooljquery%E8%A1%A8%E6%A0%BC%E6%8F%92%E4%BB%B6datatables-%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AB%AF%E5%8F%82%E6%95%B0%E8%A7%A3%E6%9E%90%E5%B7%A5%E5%85%B7/</guid>
+      <description>jQuery表格插件DataTables 的服务器端参数解析工具 分页，即时搜索和排序 几乎支持任何数据源：DOM， javascript， Ajax 和 服务</description>
+    </item>
+    
+    <item>
+      <title>配置mybatis反向生成</title>
+      <link>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/mybatis-maven-%E9%85%8D%E7%BD%AEmybatis%E5%8F%8D%E5%90%91%E7%94%9F%E6%88%90/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/mybatis-maven-%E9%85%8D%E7%BD%AEmybatis%E5%8F%8D%E5%90%91%E7%94%9F%E6%88%90/</guid>
+      <description>1 配置pom.xml 新建Maven项目，在pom.xml文件中配置 &amp;lt;build&amp;gt; &amp;lt;plugins&amp;gt; &amp;lt;plugin&amp;gt; &amp;lt;groupId&amp;gt;org.mybatis.generator&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;mybatis-generator-maven-plugin&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;1.3.2&amp;lt;/version&amp;gt; &amp;lt;configuration&amp;gt; &amp;lt;verbose&amp;gt;true&amp;lt;/verbose&amp;gt; &amp;lt;overwrite&amp;gt;true&amp;lt;/overwrite&amp;gt; &amp;lt;/configuration&amp;gt; &amp;lt;/plugin&amp;gt; &amp;lt;/plugins&amp;gt; &amp;lt;/build&amp;gt; 配置generatorConfig.xml 生成的</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Osx on 念去去云的博文</title>
+    <link>http://www.1move.life/tags/osx/</link>
+    <description>Recent content in Osx on 念去去云的博文</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 26 Nov 2017 13:47:08 +0200</lastBuildDate>
+    
+	<atom:link href="http://www.1move.life/tags/osx/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>osx 解决右上角通知广告问题</title>
+      <link>http://www.1move.life/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/osx-%E8%A7%A3%E5%86%B3%E6%B5%81%E6%B0%93%E8%BD%AF%E4%BB%B6mplayx%E5%8F%B3%E4%B8%8A%E8%A7%92%E9%80%9A%E7%9F%A5%E5%B9%BF%E5%91%8A%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Sun, 26 Nov 2017 13:47:08 +0200</pubDate>
+      
+      <guid>http://www.1move.life/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/osx-%E8%A7%A3%E5%86%B3%E6%B5%81%E6%B0%93%E8%BD%AF%E4%BB%B6mplayx%E5%8F%B3%E4%B8%8A%E8%A7%92%E9%80%9A%E7%9F%A5%E5%B9%BF%E5%91%8A%E9%97%AE%E9%A2%98/</guid>
+      <description>osx 解决右上角通知广告问题 新入了mac，安装视频播放软件时候，遇到了流氓软件MplayX,这个软件有官网，我是从官网下载。安装打开后，它让你在</description>
+    </item>
+    
+  </channel>
+</rss>

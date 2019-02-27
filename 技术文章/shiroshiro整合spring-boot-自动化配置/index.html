@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>[Shiro]Shiro整合Spring-Boot-自动化配置 - 念去去云的博文</title>
+<meta name="description" content="博客小站">
+<meta name="generator" content="Hugo 0.52" />
+<link href="http://www.1move.life/index.xml" rel="alternate" type="application/rss+xml">
+<link rel="canonical" href="http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/shiroshiro%E6%95%B4%E5%90%88spring-boot-%E8%87%AA%E5%8A%A8%E5%8C%96%E9%85%8D%E7%BD%AE/">
+<link rel="stylesheet" href="http://www.1move.life/css/theme.min.css">
+<script src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+<link rel="stylesheet" href="http://www.1move.life/css/chroma.min.css">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="http://www.1move.life/js/functions.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery.easing@1.4.1/jquery.easing.min.js"></script>
+<script src="http://www.1move.life/js/jquery.backtothetop/jquery.backtothetop.min.js"></script></head>
+<body>
+<div class="container"><header>
+<h1>念去去云的博文</h1>
+
+<p class="description">博客小站</p>
+
+</header>
+<div class="menu">
+<nav>
+<ul>
+<li><a href="/links/">友链</a></li>
+<li><a href="/about/">关于</a></li></ul>
+</nav>
+</div>
+<div class="content-container">
+<main><h1>[Shiro]Shiro整合Spring-Boot-自动化配置</h1>
+
+<blockquote>
+<p>Spring Boot 简化了spring大量的xml配置，使用了Java Config的配置，同时又提供了自动化配置工具。在引入新的组件时，只需要在配置文件上添加少量配置即可。如果需要更高自定义度配置，再添加极少的Java Config文件就好了。</p>
+</blockquote>
+
+<h2 id="简单介绍">简单介绍</h2>
+
+<h3 id="废话">废话</h3>
+
+<p>最近项目上要改造为Spring Boot，权限是本人使用的Shiro管理的。最快的办法是把Xml换成Java Config，但是配置也是不少。在网上查帖子也全是这样做的。本人想，Shiro有Spring Boot的自动化组件吗？打开Shiro的官网并没有找到，在Shiro的github的上，发现了它的自动化组件，有非Web环境的和Web环境的。在百度上没找到关于shiro-starter的使用，就想着写写博客讲一下。</p>
+
+<h3 id="shiro的spring-boot-组件">Shiro的Spring Boot 组件</h3>
+
+<p><img src="http://upload-images.jianshu.io/upload_images/2197548-ff5a4199b0ce06db.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="屏幕快照 2017-08-28 21.49.32.png" /></p>
+
+<p>看了源码，shiro-spring-boot-web-starter依赖了shiro-spring-boot-starter，本人就说说shiro-spring-boot-web-starter的使用。</p>
+
+<p>在resources/META-INF/<strong>additional-spring-configuration-metadata.json</strong>文件中，描述了Shiro提供的配置项。</p>
+<div class="highlight"><pre class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&#34;groups&#34;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;shiro&#34;</span>
+    <span class="p">},</span>
+  <span class="p">],</span>
+  <span class="nt">&#34;properties&#34;</span><span class="p">:</span> <span class="p">[</span>
+
+    <span class="p">{</span>
+      <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;shiro.web.enabled&#34;</span><span class="p">,</span>
+      <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;java.lang.Boolean&#34;</span><span class="p">,</span>
+      <span class="nt">&#34;description&#34;</span><span class="p">:</span> <span class="s2">&#34;shiro 自动化组件开关，默认值是打开&#34;</span><span class="p">,</span>
+      <span class="nt">&#34;defaultValue&#34;</span><span class="p">:</span> <span class="kc">true</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;shiro.loginUrl&#34;</span><span class="p">,</span>
+      <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;java.lang.String&#34;</span><span class="p">,</span>
+      <span class="nt">&#34;description&#34;</span><span class="p">:</span> <span class="s2">&#34;配置shiro的认证(登录)Url&#34;</span><span class="p">,</span>
+      <span class="nt">&#34;defaultValue&#34;</span><span class="p">:</span> <span class="s2">&#34;/login.jsp&#34;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;shiro.successUrl&#34;</span><span class="p">,</span>
+      <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;java.lang.String&#34;</span><span class="p">,</span>
+      <span class="nt">&#34;description&#34;</span><span class="p">:</span> <span class="s2">&#34;配置shiro的认证(登录)成功后跳转的Url&#34;</span><span class="p">,</span>
+      <span class="nt">&#34;defaultValue&#34;</span><span class="p">:</span> <span class="s2">&#34;/&#34;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;shiro.unauthorizedUrl&#34;</span><span class="p">,</span>
+      <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;java.lang.String&#34;</span><span class="p">,</span>
+      <span class="nt">&#34;description&#34;</span><span class="p">:</span> <span class="s2">&#34;配置shiro的未授权跳转的Url，http状态码403&#34;</span><span class="p">,</span>
+      <span class="nt">&#34;defaultValue&#34;</span><span class="p">:</span> <span class="kc">null</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;shiro.sessionManager.sessionIdCookieEnabled&#34;</span><span class="p">,</span>
+      <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;java.lang.String&#34;</span><span class="p">,</span>
+      <span class="nt">&#34;description&#34;</span><span class="p">:</span> <span class="s2">&#34;是否使用cookie存储session的id&#34;</span><span class="p">,</span>
+      <span class="nt">&#34;defaultValue&#34;</span><span class="p">:</span> <span class="kc">true</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;shiro.sessionManager.sessionIdUrlRewritingEnabled&#34;</span><span class="p">,</span>
+      <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;java.lang.String&#34;</span><span class="p">,</span>
+      <span class="nt">&#34;description&#34;</span><span class="p">:</span> <span class="s2">&#34;通过URL参数启用或禁用会话跟踪。 如果您的网站需要Cookie，建议您禁用此功能。&#34;</span><span class="p">,</span>
+      <span class="nt">&#34;defaultValue&#34;</span><span class="p">:</span> <span class="kc">true</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span></code></pre></div>
+<p>配置项描述文件，在</p>
+
+<p><img src="http://upload-images.jianshu.io/upload_images/2197548-80027e6233271def.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="屏幕快照 2017-08-28 22.39.57.png" /></p>
+
+<p>这个包里也有一部分配置。</p>
+
+<h3 id="全部配置">全部配置</h3>
+
+<p>本人将所有的配置整理列出来</p>
+<div class="highlight"><pre class="chroma"><code class="language-yml" data-lang="yml">shiro<span class="p">:</span><span class="w"> 
+</span><span class="w">  </span>web<span class="p">:</span><span class="w"> 
+</span><span class="w">    </span><span class="c">## 开启shiro web自动化配置，默认开启</span><span class="w">
+</span><span class="w">    </span>enabled<span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">  </span>loginUrl<span class="p">:</span><span class="w"> </span>/login.jsp<span class="w">
+</span><span class="w">  </span>successUrl<span class="p">:</span><span class="w"> </span>/<span class="w">
+</span><span class="w">  </span><span class="c">## 必须要配置为授权的url,否则在无权限的情况下，会找不到未授权url,导致找不到安全管理器（SecurityManager）</span><span class="w">
+</span><span class="w">  </span>unauthorizedUrl<span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="w">  </span><span class="c">## session管理方式，true使用shiro提供的session管理，false则使用servlet提供的session管理</span><span class="w">
+</span><span class="w">  </span>userNativeSessionManager<span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span><span class="w">  </span><span class="c">## 会话管理</span><span class="w">
+</span><span class="w">  </span>sessionManager<span class="p">:</span><span class="w"> 
+</span><span class="w">    </span>sessionIdCookieEnabled<span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">    </span>sessionIdUrlRewritingEnabled<span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">    </span>deleteInvalidSessions<span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">    </span>cookie<span class="p">:</span><span class="w"> 
+</span><span class="w">      </span>name<span class="p">:</span><span class="w"> </span>JSESSIONID<span class="w">
+</span><span class="w">      </span>maxAge<span class="p">:</span><span class="w"> </span>-<span class="m">1</span><span class="w">
+</span><span class="w">      </span>domain<span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="w">      </span>path<span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="w">      </span>secure<span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span><span class="w">  </span><span class="c">## 记住我管理</span><span class="w">
+</span><span class="w">  </span>rememberMeManager<span class="p">:</span><span class="w"> 
+</span><span class="w">    </span>cookie<span class="p">:</span><span class="w"> 
+</span><span class="w">      </span>name<span class="p">:</span><span class="w"> </span>rememberMe<span class="w">
+</span><span class="w">      </span><span class="c">## 默认一年</span><span class="w">
+</span><span class="w">      </span>maxAge<span class="p">:</span><span class="w"> </span><span class="m">60</span><span class="w"> </span>*<span class="w"> </span><span class="m">60</span><span class="w"> </span>*<span class="w"> </span><span class="m">24</span><span class="w"> </span>*<span class="w"> </span><span class="m">365</span><span class="w">
+</span><span class="w">      </span>domain<span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="w">      </span>path<span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+</span><span class="w">      </span>secure<span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span><span class="w">    </span></code></pre></div>
+<h2 id="使用">使用</h2>
+
+<p>下面就讲讲怎么使用</p>
+
+<h3 id="导入pom">导入pom</h3>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml">		<span class="nt">&lt;dependency&gt;</span>
+			<span class="nt">&lt;groupId&gt;</span>org.apache.shiro<span class="nt">&lt;/groupId&gt;</span>
+			<span class="nt">&lt;artifactId&gt;</span>shiro-spring-boot-web-starter<span class="nt">&lt;/artifactId&gt;</span>
+			<span class="nt">&lt;version&gt;</span>1.4.0<span class="nt">&lt;/version&gt;</span>
+		<span class="nt">&lt;/dependency&gt;</span></code></pre></div>
+<h3 id="添加配置">添加配置</h3>
+<div class="highlight"><pre class="chroma"><code class="language-yml" data-lang="yml">shiro<span class="p">:</span><span class="w">
+</span><span class="w">  </span>loginUrl<span class="p">:</span><span class="w"> </span>/login.html<span class="w">
+</span><span class="w">  </span>unauthorizedUrl<span class="p">:</span><span class="w"> </span>/unauthorized<span class="w">
+</span><span class="w">  </span><span class="c">## 使用shiro管理会话</span><span class="w">
+</span><span class="w">  </span>userNativeSessionManager<span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">  </span>sessionManager<span class="p">:</span><span class="w">
+</span><span class="w">    </span>sessionIdUrlRewritingEnabled<span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span><span class="w">    </span>cookie<span class="p">:</span><span class="w">
+</span><span class="w">      </span>name<span class="p">:</span><span class="w"> </span>sid</code></pre></div>
+<h3 id="增加配置类">增加配置类</h3>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">cc.yihy.shiro.demo.config</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.apache.shiro.realm.Realm</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.shiro.realm.text.TextConfigurationRealm</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.shiro.spring.web.config.DefaultShiroFilterChainDefinition</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.shiro.spring.web.config.ShiroFilterChainDefinition</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.annotation.Bean</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.annotation.Configuration</span><span class="o">;</span>
+
+<span class="cm">/**
+</span><span class="cm"> * @Package: cc.yihy.shiro.demo.config
+</span><span class="cm"> * @date: 2017/8/28 23:21
+</span><span class="cm"> * @author: Yihy
+</span><span class="cm"> * @version: V1.0
+</span><span class="cm"> * @Description:
+</span><span class="cm"> */</span>
+<span class="nd">@Configuration</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ShiroConfig</span> <span class="o">{</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * 验证用户
+</span><span class="cm">     * 可以声明多个Realm Bean，Shiro都会把它注入的
+</span><span class="cm">     * @return
+</span><span class="cm">     */</span>
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="n">Realm</span> <span class="nf">realm</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">TextConfigurationRealm</span> <span class="n">realm</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TextConfigurationRealm</span><span class="o">();</span>
+        <span class="c1">//添加两个用户
+</span><span class="c1"></span>        <span class="c1">//joe.coder=password 角色 user
+</span><span class="c1"></span>        <span class="c1">//jill.coder=password 角色 admin
+</span><span class="c1"></span>        <span class="n">realm</span><span class="o">.</span><span class="na">setUserDefinitions</span><span class="o">(</span><span class="s">&#34;joe.coder=password,user\n&#34;</span> <span class="o">+</span>
+                <span class="s">&#34;jill.coder=password,admin&#34;</span><span class="o">);</span>
+
+        <span class="c1">//设置角色admin的权限是read,write
+</span><span class="c1"></span>        <span class="c1">//设置角色user的权限是read
+</span><span class="c1"></span>        <span class="n">realm</span><span class="o">.</span><span class="na">setRoleDefinitions</span><span class="o">(</span><span class="s">&#34;admin=read,write\n&#34;</span> <span class="o">+</span>
+                <span class="s">&#34;user=read&#34;</span><span class="o">);</span>
+        <span class="n">realm</span><span class="o">.</span><span class="na">setCachingEnabled</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+
+        <span class="k">return</span> <span class="n">realm</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * 配置shiro的url权限
+</span><span class="cm">     *
+</span><span class="cm">     * @return
+</span><span class="cm">     */</span>
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="n">ShiroFilterChainDefinition</span> <span class="nf">shiroFilterChainDefinition</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">DefaultShiroFilterChainDefinition</span> <span class="n">chainDefinition</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DefaultShiroFilterChainDefinition</span><span class="o">();</span>
+        <span class="n">chainDefinition</span><span class="o">.</span><span class="na">addPathDefinition</span><span class="o">(</span><span class="s">&#34;/login.html&#34;</span><span class="o">,</span> <span class="s">&#34;authc&#34;</span><span class="o">);</span> <span class="c1">// need to accept POSTs from the login form
+</span><span class="c1"></span>        <span class="n">chainDefinition</span><span class="o">.</span><span class="na">addPathDefinition</span><span class="o">(</span><span class="s">&#34;/logout&#34;</span><span class="o">,</span> <span class="s">&#34;logout&#34;</span><span class="o">);</span>
+        <span class="n">chainDefinition</span><span class="o">.</span><span class="na">addPathDefinition</span><span class="o">(</span><span class="s">&#34;/account-info&#34;</span><span class="o">,</span> <span class="s">&#34;perms[write]&#34;</span><span class="o">);</span>
+        <span class="n">chainDefinition</span><span class="o">.</span><span class="na">addPathDefinition</span><span class="o">(</span><span class="s">&#34;/account-info1&#34;</span><span class="o">,</span> <span class="s">&#34;roles[admin]&#34;</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">chainDefinition</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
+<p>这样就完成了Shiro的自动化配置。</p>
+
+<h3 id="补充-需要自定义shiro的filter">补充 需要自定义shiro的Filter</h3>
+
+<p>让ShiroConfig继承ShiroWebFilterConfiguration（<code>org.apache.shiro.spring.config.web.autoconfigure.ShiroWebFilterConfiguration</code>）类，重写ShiroFilterFactoryBean方法,就可以达到目的。</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java">    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="n">ShiroFilterFactoryBean</span> <span class="nf">shiroFilterFactoryBean</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">ShiroFilterFactoryBean</span> <span class="n">factoryBean</span> <span class="o">=</span> <span class="kd">super</span><span class="o">.</span><span class="na">shiroFilterFactoryBean</span><span class="o">();</span>
+        <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">Filter</span><span class="o">&gt;</span> <span class="n">filterMap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedHashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="c1">//添加自定义的Filter,这里我随便new了一个filter
+</span><span class="c1"></span>        <span class="n">filterMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;anyrole&#34;</span><span class="o">,</span><span class="k">new</span> <span class="n">UserFilter</span><span class="o">());</span>
+        <span class="n">factoryBean</span><span class="o">.</span><span class="na">setFilters</span><span class="o">(</span><span class="n">filterMap</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">factoryBean</span><span class="o">;</span>
+    <span class="o">}</span></code></pre></div>
+<h2 id="小结">小结</h2>
+
+<p>今天看的shiro的自动化组件，晚上写博文，本人shiro用的还不错，spring boot的东西也是用了很长时间。写博文的时候，同时也是头一次写了shiro自动化组件的demo。在测试授权的时候，当无权限的时候，一直给我报安全管理器找不到的问题。检查测试了半天，才发现是未授权url未配置的原因。</p>
+
+<p>使用shiro的自动化配置，可以轻易的完成了shiro的配置。虽然很好，但也隐藏了很多的细节，以至于知道怎么用，出了问题就不知道怎么解决。建议有空还是看看底层如何实现的。</p>
+
+<ul>
+<li>最后奉上demo : <a href="http://git.oschina.net/yihyforever/spring-boot-shiro-demo">点击</a></li>
+</ul>
+<div class="edit-meta">更新时间 0001-01-01 / 发布时间 0001-01-01<br></div><nav class="pagination"><a class="nav nav-prev" href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/shiro-filterrealm%E7%BB%91%E5%AE%9A-%E5%A4%9A%E7%99%BB%E9%99%86%E5%85%A5%E5%8F%A3%E5%8C%BA%E5%88%86%E5%89%8D%E5%90%8E%E5%8F%B0/" title="[Shiro]-filter&amp;realm绑定--多登陆入口，区分前后台"><i class="fas fa-arrow-left" aria-hidden="true"></i> Prev - [Shiro]-filter&amp;realm绑定--多登陆入口，区分前后台</a>
+<a class="nav nav-next" href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/tooljquery%E8%A1%A8%E6%A0%BC%E6%8F%92%E4%BB%B6datatables-%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AB%AF%E5%8F%82%E6%95%B0%E8%A7%A3%E6%9E%90%E5%B7%A5%E5%85%B7/" title="jQuery表格插件DataTables  的服务器端参数解析工具">Next - jQuery表格插件DataTables  的服务器端参数解析工具 <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+</nav><footer><p class="powered">Powered by <a href="https://gohugo.io">Hugo</a>. Theme by <a href="https://themes.gohugo.io/hugo-theme-techdoc/">TechDoc</a>. Designed by <a href="https://github.com/thingsym/hugo-theme-techdoc">Thingsym</a>.</p>
+</footer>
+</main><div class="sidebar">
+<nav>
+<ul>
+<li class=""><a href="http://www.1move.life/">Home</a></li>
+
+
+
+<li class="parent"><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/">技术文章s</a>
+<ul class="sub-menu">
+<li class=""><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/jsoupjsoup-html%E9%A1%B5%E9%9D%A2%E5%A4%84%E7%90%86%E7%AE%80%E5%8D%95%E7%94%A8%E6%B3%95/">Jsoup  Html页面处理简单用法</a></li>
+<li class=""><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/shiro%E5%A4%9Arealm%E6%97%B6%E6%8C%87%E5%AE%9A%E7%99%BB%E5%BD%95realm/">多Realm时，指定登录Realm</a></li>
+<li class=""><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/java%E5%9F%BA%E7%A1%80-bean%E7%B1%BB%E5%9F%BA%E6%9C%AC%E6%96%B9%E6%B3%95%E9%87%8D%E5%86%99/">类基本方法（toString、hashCode、equals、compareTo）重写</a></li>
+<li class=""><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/github%E9%A1%B9%E7%9B%AE%E4%BD%BF%E7%94%A8ci%E6%9E%84%E5%BB%BA%E6%8C%87%E5%8D%97/">Github项目使用多CI构建指南</a></li>
+<li class=""><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/spring-data-jpa-%E6%9F%A5%E8%AF%A2%E5%85%B3%E9%94%AE%E5%AD%97/">Spring Data Jpa 查询关键字</a></li>
+<li class=""><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/shiro-filterrealm%E7%BB%91%E5%AE%9A-%E5%A4%9A%E7%99%BB%E9%99%86%E5%85%A5%E5%8F%A3%E5%8C%BA%E5%88%86%E5%89%8D%E5%90%8E%E5%8F%B0/">[Shiro]-filter&amp;realm绑定--多登陆入口，区分前后台</a></li>
+<li class="active"><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/shiroshiro%E6%95%B4%E5%90%88spring-boot-%E8%87%AA%E5%8A%A8%E5%8C%96%E9%85%8D%E7%BD%AE/">[Shiro]Shiro整合Spring-Boot-自动化配置</a></li>
+<li class=""><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/tooljquery%E8%A1%A8%E6%A0%BC%E6%8F%92%E4%BB%B6datatables-%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AB%AF%E5%8F%82%E6%95%B0%E8%A7%A3%E6%9E%90%E5%B7%A5%E5%85%B7/">jQuery表格插件DataTables  的服务器端参数解析工具</a></li>
+<li class=""><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/mybatis-maven-%E9%85%8D%E7%BD%AEmybatis%E5%8F%8D%E5%90%91%E7%94%9F%E6%88%90/">配置mybatis反向生成</a></li>
+</ul>
+  
+</li>
+
+<li class=""><a href="/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/">日常问题s</a>
+<ul class="">
+<li class=""><a href="/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/idea%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7idea-%E6%9C%AC%E5%9C%B0%E5%8C%96%E6%8C%87%E5%8D%97-%E7%BF%BB%E8%AF%91%E8%87%AAidea%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/">Idea  本地化指南</a></li>
+<li class=""><a href="/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/%E8%BD%AC%E8%BD%BDthymeleaf%E5%8F%82%E8%80%83%E6%89%8B%E5%86%8C/">[转载]Thymeleaf参考手册.md</a></li>
+<li class=""><a href="/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/osx-%E8%A7%A3%E5%86%B3%E6%B5%81%E6%B0%93%E8%BD%AF%E4%BB%B6mplayx%E5%8F%B3%E4%B8%8A%E8%A7%92%E9%80%9A%E7%9F%A5%E5%B9%BF%E5%91%8A%E9%97%AE%E9%A2%98/">osx 解决右上角通知广告问题</a></li>
+<li class=""><a href="/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/idea%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7idea-%E6%B1%89%E5%8C%96%E4%B8%AD%E6%96%87%E5%8C%96%E6%95%99%E7%A8%8B/">[Idea]开发工具IDEA-汉化(中文化)教程</a></li>
+</ul>
+  
+</li>
+</ul>
+</nav>
+
+
+<div class="sidebar-footer"></div>
+</div>
+</div><a href="#" id="backtothetop-fixed" class="backtothetop"
+ data-backtothetop-duration="600"
+ data-backtothetop-easing="easeOutQuart"
+ data-backtothetop-fixed-fadeIn="1000"
+ data-backtothetop-fixed-fadeOut="1000"
+ data-backtothetop-fixed-bottom="10"
+ data-backtothetop-fixed-right="20">
+<span class="fa-layers fa-fw">
+<i class="fas fa-circle"></i>
+<i class="fas fa-arrow-circle-up"></i>
+</span></a>
+</div>
+</body>
+</html>

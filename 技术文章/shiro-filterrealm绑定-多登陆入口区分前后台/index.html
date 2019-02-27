@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>[Shiro]-filter&amp;realm绑定--多登陆入口，区分前后台 - 念去去云的博文</title>
+<meta name="description" content="博客小站">
+<meta name="generator" content="Hugo 0.52" />
+<link href="http://www.1move.life/index.xml" rel="alternate" type="application/rss+xml">
+<link rel="canonical" href="http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/shiro-filterrealm%E7%BB%91%E5%AE%9A-%E5%A4%9A%E7%99%BB%E9%99%86%E5%85%A5%E5%8F%A3%E5%8C%BA%E5%88%86%E5%89%8D%E5%90%8E%E5%8F%B0/">
+<link rel="stylesheet" href="http://www.1move.life/css/theme.min.css">
+<script src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+<link rel="stylesheet" href="http://www.1move.life/css/chroma.min.css">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="http://www.1move.life/js/functions.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery.easing@1.4.1/jquery.easing.min.js"></script>
+<script src="http://www.1move.life/js/jquery.backtothetop/jquery.backtothetop.min.js"></script></head>
+<body>
+<div class="container"><header>
+<h1>念去去云的博文</h1>
+
+<p class="description">博客小站</p>
+
+</header>
+<div class="menu">
+<nav>
+<ul>
+<li><a href="/links/">友链</a></li>
+<li><a href="/about/">关于</a></li></ul>
+</nav>
+</div>
+<div class="content-container">
+<main><h1>[Shiro]-filter&amp;realm绑定--多登陆入口，区分前后台</h1>
+
+<h1 id="shiro框架-filter-realm绑定">Shiro框架 filter&amp;realm绑定</h1>
+
+<h2 id="这种实现方式有问题-会影响到后续的角色验证-不建议看了">这种实现方式有问题，会影响到后续的角色验证。不建议看了</h2>
+
+<h2 id="新的实现方式-自定义token-http-www-jianshu-com-p-986a3c41dac1">新的实现方式 ： <a href="http://www.jianshu.com/p/986a3c41dac1">自定义Token</a></h2>
+
+<hr />
+
+<ul>
+<li><strong>shiro filter与Realm绑定</strong></li>
+<li><strong>使用Spring整合Shiro</strong></li>
+<li><strong>多登陆入口，成功后跳转到不同地址</strong></li>
+<li><strong>重写Realm获取方式</strong>
+&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;
+&gt;  最近在项目中使用了apache的轻量级Shiro框架进行权限管理，使用了多个filter，Shiro会默认迭代Realm进行登陆，<strong>即使第一个Realm通过校验，也会继续迭代，造成性能的浪费，和数据库查询</strong>。又或者<strong>前Realm里做了一些校验，抛出了异常，也会被后面的无用的Realm校验失败抛出的一场覆盖。</strong></li>
+</ul>
+
+<hr />
+
+<p>不废话，上教程不废话，上教程
+ 注意：这里filter统一指shiro 定义的filter
+  至于servlet的filter会写成 servlet filter</p>
+
+<h4 id="这是先前的配置">这是先前的配置</h4>
+
+<p>已经实现方式赋予Realm对应的role角色，已经有多入口，前后台分开的功能，</p>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;shiroFilter&#34;</span> <span class="na">class=</span><span class="s">&#34;org.apache.shiro.spring.web.ShiroFilterFactoryBean&#34;</span><span class="nt">&gt;</span>
+        <span class="c">&lt;!-- shiro 的核心安全接口 --&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;securityManager&#34;</span> <span class="na">ref=</span><span class="s">&#34;securityManager&#34;</span> <span class="nt">/&gt;</span>
+        <span class="c">&lt;!-- 未授权时要跳转的连接 --&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;unauthorizedUrl&#34;</span> <span class="na">value=</span><span class="s">&#34;/unauthorized.jsp&#34;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;filters&#34;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;map&gt;</span>
+                <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&#34;admin&#34;</span> <span class="na">value-ref=</span><span class="s">&#34;adminformAuthenticationFilter&#34;</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&#34;authc&#34;</span> <span class="na">value-ref=</span><span class="s">&#34;formAuthenticationFilter&#34;</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;/map&gt;</span>
+        <span class="nt">&lt;/property&gt;</span>
+        <span class="c">&lt;!-- shiro 连接约束配置 --&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;filterChainDefinitions&#34;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;value&gt;</span>
+                /user.html = authc
+                /admin.html =authc
+                /login.html = authc
+                /admin/login.html =admin
+                /logout = logout
+                /resource/** = anon
+            <span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;formAuthenticationFilter&#34;</span>
+        <span class="na">class=</span><span class="s">&#34;org.apache.shiro.web.filter.authc.FormAuthenticationFilter&#34;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;loginUrl&#34;</span> <span class="na">value=</span><span class="s">&#34;/login.html&#34;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;successUrl&#34;</span> <span class="na">value=</span><span class="s">&#34;/ok.html&#34;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;adminformAuthenticationFilter&#34;</span>
+        <span class="na">class=</span><span class="s">&#34;org.apache.shiro.web.filter.authc.FormAuthenticationFilter&#34;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;loginUrl&#34;</span> <span class="na">value=</span><span class="s">&#34;/admin/login.html&#34;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;successUrl&#34;</span> <span class="na">value=</span><span class="s">&#34;/admin/ok.html&#34;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;AdminRealm&#34;</span> <span class="na">class=</span><span class="s">&#34;cc.yihy.realm.AdminRealm&#34;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;userService&#34;</span> <span class="na">ref=</span><span class="s">&#34;UserService&#34;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;UserRealm&#34;</span> <span class="na">class=</span><span class="s">&#34;cc.yihy.realm.UserRealm&#34;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;userService&#34;</span> <span class="na">ref=</span><span class="s">&#34;UserService&#34;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+
+    <span class="c">&lt;!-- 安全管理器 --&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;securityManager&#34;</span> <span class="na">class=</span><span class="s">&#34;org.apache.shiro.web.mgt.DefaultWebSecurityManager&#34;</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- 默认的Realm验证 --&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;realms&#34;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;list&gt;</span>
+                <span class="nt">&lt;ref</span> <span class="na">bean=</span><span class="s">&#34;UserRealm&#34;</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;ref</span> <span class="na">bean=</span><span class="s">&#34;AdminRealm&#34;</span><span class="nt">&gt;&lt;/ref&gt;</span>
+            <span class="nt">&lt;/list&gt;</span>
+        <span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;lifecycleBeanPostProcessor&#34;</span> <span class="na">class=</span><span class="s">&#34;org.apache.shiro.spring.LifecycleBeanPostProcessor&#34;</span> <span class="nt">/&gt;</span></code></pre></div>
+<hr />
+
+<p>####在我们点击登陆后，Shiro会使用我们配置的FormAuthenticationFilter进行验证。
+执行</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">//父类里实现的方法
+</span><span class="c1"></span><span class="kd">protected</span> <span class="kt">boolean</span> <span class="nf">executeLogin</span><span class="o">(</span><span class="n">ServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">ServletResponse</span> <span class="n">response</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+    <span class="c1">//这里创建用户的令牌
+</span><span class="c1"></span>        <span class="n">AuthenticationToken</span> <span class="n">token</span> <span class="o">=</span> <span class="n">createToken</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">token</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">String</span> <span class="n">msg</span> <span class="o">=</span> <span class="s">&#34;createToken method implementation returned null. A valid non-null AuthenticationToken &#34;</span> <span class="o">+</span>
+                    <span class="s">&#34;must be created in order to execute a login attempt.&#34;</span><span class="o">;</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalStateException</span><span class="o">(</span><span class="n">msg</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">Subject</span> <span class="n">subject</span> <span class="o">=</span> <span class="n">getSubject</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
+            <span class="c1">//在这里进行登陆验证
+</span><span class="c1"></span>            <span class="n">subject</span><span class="o">.</span><span class="na">login</span><span class="o">(</span><span class="n">token</span><span class="o">);</span>
+            <span class="k">return</span> <span class="n">onLoginSuccess</span><span class="o">(</span><span class="n">token</span><span class="o">,</span> <span class="n">subject</span><span class="o">,</span> <span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">AuthenticationException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">onLoginFailure</span><span class="o">(</span><span class="n">token</span><span class="o">,</span> <span class="n">e</span><span class="o">,</span> <span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+      <span class="kd">protected</span> <span class="n">AuthenticationToken</span> <span class="nf">createToken</span><span class="o">(</span><span class="n">ServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">ServletResponse</span> <span class="n">response</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">String</span> <span class="n">username</span> <span class="o">=</span> <span class="n">getUsername</span><span class="o">(</span><span class="n">request</span><span class="o">);</span>
+        <span class="n">String</span> <span class="n">password</span> <span class="o">=</span> <span class="n">getPassword</span><span class="o">(</span><span class="n">request</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">createToken</span><span class="o">(</span><span class="n">username</span><span class="o">,</span> <span class="n">password</span><span class="o">,</span> <span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="c1">//父类的创建令牌的实现
+</span><span class="c1"></span>     <span class="kd">protected</span> <span class="n">AuthenticationToken</span> <span class="nf">createToken</span><span class="o">(</span><span class="n">String</span> <span class="n">username</span><span class="o">,</span> <span class="n">String</span> <span class="n">password</span><span class="o">,</span>
+                                              <span class="n">ServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">ServletResponse</span> <span class="n">response</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">boolean</span> <span class="n">rememberMe</span> <span class="o">=</span> <span class="n">isRememberMe</span><span class="o">(</span><span class="n">request</span><span class="o">);</span>
+        <span class="n">String</span> <span class="n">host</span> <span class="o">=</span> <span class="n">getHost</span><span class="o">(</span><span class="n">request</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">createToken</span><span class="o">(</span><span class="n">username</span><span class="o">,</span> <span class="n">password</span><span class="o">,</span> <span class="n">rememberMe</span><span class="o">,</span> <span class="n">host</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="c1">//父类的创建令牌的实现
+</span><span class="c1"></span>   <span class="kd">protected</span> <span class="n">AuthenticationToken</span> <span class="nf">createToken</span><span class="o">(</span><span class="n">String</span> <span class="n">username</span><span class="o">,</span> <span class="n">String</span> <span class="n">password</span><span class="o">,</span>
+                                              <span class="kt">boolean</span> <span class="n">rememberMe</span><span class="o">,</span> <span class="n">String</span> <span class="n">host</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">UsernamePasswordToken</span><span class="o">(</span><span class="n">username</span><span class="o">,</span> <span class="n">password</span><span class="o">,</span> <span class="n">rememberMe</span><span class="o">,</span> <span class="n">host</span><span class="o">);</span>
+    <span class="o">}</span></code></pre></div>
+<p>subject.login(token);的实现类里，又调用了安全管理器的login。传的对象是一个Token令牌。
+####再看看安全管理器里面是怎么进行登录的
+ Subject subject = securityManager.login(this, token);</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"> <span class="c1">//安全管理器实现类DefaultSecurityManager里面的login
+</span><span class="c1"></span><span class="kd">public</span> <span class="n">Subject</span> <span class="nf">login</span><span class="o">(</span><span class="n">Subject</span> <span class="n">subject</span><span class="o">,</span> <span class="n">AuthenticationToken</span> <span class="n">token</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">AuthenticationException</span> <span class="o">{</span>
+      <span class="c1">//
+</span><span class="c1"></span>        <span class="n">AuthenticationInfo</span> <span class="n">info</span><span class="o">;</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">info</span> <span class="o">=</span> <span class="n">authenticate</span><span class="o">(</span><span class="n">token</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">AuthenticationException</span> <span class="n">ae</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">try</span> <span class="o">{</span>
+                <span class="n">onFailedLogin</span><span class="o">(</span><span class="n">token</span><span class="o">,</span> <span class="n">ae</span><span class="o">,</span> <span class="n">subject</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">log</span><span class="o">.</span><span class="na">isInfoEnabled</span><span class="o">())</span> <span class="o">{</span>
+                    <span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">&#34;onFailedLogin method threw an &#34;</span> <span class="o">+</span>
+                            <span class="s">&#34;exception.  Logging and propagating original AuthenticationException.&#34;</span><span class="o">,</span> <span class="n">e</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">throw</span> <span class="n">ae</span><span class="o">;</span> <span class="c1">//propagate
+</span><span class="c1"></span>        <span class="o">}</span>
+
+        <span class="n">Subject</span> <span class="n">loggedIn</span> <span class="o">=</span> <span class="n">createSubject</span><span class="o">(</span><span class="n">token</span><span class="o">,</span> <span class="n">info</span><span class="o">,</span> <span class="n">subject</span><span class="o">);</span>
+
+        <span class="n">onSuccessfulLogin</span><span class="o">(</span><span class="n">token</span><span class="o">,</span> <span class="n">info</span><span class="o">,</span> <span class="n">loggedIn</span><span class="o">);</span>
+
+        <span class="k">return</span> <span class="n">loggedIn</span><span class="o">;</span>
+    <span class="o">}</span>
+  <span class="c1">//这是它的父类里面 
+</span><span class="c1"></span>   <span class="kd">private</span> <span class="n">Authenticator</span> <span class="n">authenticator</span><span class="o">;</span>
+
+   <span class="kd">public</span> <span class="n">AuthenticationInfo</span> <span class="nf">authenticate</span><span class="o">(</span><span class="n">AuthenticationToken</span> <span class="n">token</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">AuthenticationException</span> <span class="o">{</span>
+       <span class="c1">//真正进行登陆Realm的在这里
+</span><span class="c1"></span>        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">authenticator</span><span class="o">.</span><span class="na">authenticate</span><span class="o">(</span><span class="n">token</span><span class="o">);</span>
+    <span class="o">}</span></code></pre></div>
+<h4 id="还是看下authenticator接口实现类-modularrealmauthenticator-的源码">还是看下Authenticator接口实现类（ModularRealmAuthenticator）的源码</h4>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"> <span class="n">这是配置的Realm集合</span>
+<span class="kd">private</span> <span class="n">Collection</span><span class="o">&lt;</span><span class="n">Realm</span><span class="o">&gt;</span> <span class="n">realms</span><span class="o">;</span>
+<span class="c1">//迭代Realm进行验证
+</span><span class="c1"></span>   <span class="kd">protected</span> <span class="n">AuthenticationInfo</span> <span class="nf">doAuthenticate</span><span class="o">(</span><span class="n">AuthenticationToken</span> <span class="n">authenticationToken</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">AuthenticationException</span> <span class="o">{</span>
+        <span class="n">assertRealmsConfigured</span><span class="o">();</span>
+        <span class="n">Collection</span><span class="o">&lt;</span><span class="n">Realm</span><span class="o">&gt;</span> <span class="n">realms</span> <span class="o">=</span> <span class="n">getRealms</span><span class="o">();</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">realms</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">==</span> <span class="n">1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">doSingleRealmAuthentication</span><span class="o">(</span><span class="n">realms</span><span class="o">.</span><span class="na">iterator</span><span class="o">().</span><span class="na">next</span><span class="o">(),</span> <span class="n">authenticationToken</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">doMultiRealmAuthentication</span><span class="o">(</span><span class="n">realms</span><span class="o">,</span> <span class="n">authenticationToken</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span></code></pre></div>
+<p><em>到这里，filter调用realm进行验证的流程基本已经清晰了。</em></p>
+
+<p>filter创建一个Token对象，传到安全管理器（securityManager），让安全管理器调用Authenticator属性进行迭代Realm。
+怎么让Filter找到对应权限的realm呢？他们中间传递一一个对象Token令牌。
+Token里放了这些基本信息
+<strong>new UsernamePasswordToken(username, password, rememberMe, host)；</strong></p>
+
+<p>从filter到realm并没有角色名的传递。
+filter的name属性里放的是角色名。这点在Spring创建ShiroFilter 可以看到。</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">//getFilters()拿到的是xml配置上的filters
+</span><span class="c1"></span>        <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Filter</span><span class="o">&gt;</span> <span class="n">filters</span> <span class="o">=</span> <span class="n">getFilters</span><span class="o">();</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">CollectionUtils</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">(</span><span class="n">filters</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Filter</span><span class="o">&gt;</span> <span class="n">entry</span> <span class="o">:</span> <span class="n">filters</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
+                <span class="n">String</span> <span class="n">name</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="na">getKey</span><span class="o">();</span>
+                <span class="n">Filter</span> <span class="n">filter</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="na">getValue</span><span class="o">();</span>
+                <span class="n">applyGlobalPropertiesIfNecessary</span><span class="o">(</span><span class="n">filter</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">filter</span> <span class="k">instanceof</span> <span class="n">Nameable</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="o">((</span><span class="n">Nameable</span><span class="o">)</span> <span class="n">filter</span><span class="o">).</span><span class="na">setName</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
+                <span class="o">}</span>
+                <span class="c1">//&#39;init&#39; argument is false, since Spring-configured filters should be initialized
+</span><span class="c1"></span>                <span class="c1">//in Spring (i.e. &#39;init-method=blah&#39;) or implement InitializingBean:
+</span><span class="c1"></span>                <span class="n">manager</span><span class="o">.</span><span class="na">addFilter</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">filter</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span></code></pre></div>
+<p>现在想要把filter的信息传给realm就需要在他们之间传递的对象动手脚了。让Token把Filter对象带过去就行了。
+那那边怎么处理呢。</p>
+
+<p>#### 实例安全管理器的时候，会实例一个ModularRealmAuthorizer对象，并可以设置为我们自定义的。</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"> <span class="kd">private</span> <span class="n">Authorizer</span> <span class="n">authorizer</span><span class="o">;</span>
+<span class="c1">//安全管理器实现类的父类，在实例安全管理器的时候，会创建一个ModularRealmAuthorizer对象，迭代Realm验证，就是ModularRealmAuthorizer做的工作
+</span><span class="c1"></span>    <span class="cm">/**
+</span><span class="cm">     * Default no-arg constructor that initializes an internal default
+</span><span class="cm">     * {@link org.apache.shiro.authz.ModularRealmAuthorizer ModularRealmAuthorizer}.
+</span><span class="cm">     */</span>
+    <span class="kd">public</span> <span class="nf">AuthorizingSecurityManager</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">();</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">authorizer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ModularRealmAuthorizer</span><span class="o">();</span>
+    <span class="o">}</span>
+
+   <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAuthorizer</span><span class="o">(</span><span class="n">Authorizer</span> <span class="n">authorizer</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">authorizer</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">String</span> <span class="n">msg</span> <span class="o">=</span> <span class="s">&#34;Authorizer argument cannot be null.&#34;</span><span class="o">;</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="n">msg</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">authorizer</span> <span class="o">=</span> <span class="n">authorizer</span><span class="o">;</span>
+    <span class="o">}</span></code></pre></div>
+<p>到这里，Filter&amp;Realm绑定需要修改的地方基本都知道了。
+<strong>重写FormAuthenticationFilter的createToken(String username, String password,boolean rememberMe, String host)方法</strong>，<strong>自定义一个Token，可以存放Filter</strong>。<strong>重写ModularRealmAuthorizer对象中获取Realm的方法。</strong></p>
+
+<p>下面是实现代码</p>
+
+<h4 id="newformauthenticationfilter-实现">NewFormAuthenticationFilter 实现</h4>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">NewFormAuthenticationFilter</span> <span class="kd">extends</span> <span class="n">FormAuthenticationFilter</span> <span class="o">{</span>
+    <span class="cm">/**
+</span><span class="cm">     * 创建自定义的令牌，加入当前filter
+</span><span class="cm">     */</span>
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="n">AuthenticationToken</span> <span class="nf">createToken</span><span class="o">(</span><span class="n">String</span> <span class="n">username</span><span class="o">,</span> <span class="n">String</span> <span class="n">password</span><span class="o">,</span>
+            <span class="kt">boolean</span> <span class="n">rememberMe</span><span class="o">,</span> <span class="n">String</span> <span class="n">host</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">UsernamePasswordAndFilterToken</span><span class="o">(</span><span class="n">username</span><span class="o">,</span> <span class="n">password</span><span class="o">,</span>
+                <span class="n">rememberMe</span><span class="o">,</span> <span class="n">host</span><span class="o">,</span> <span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * 获取当前Filter的名字（角色名）扩大访问范围
+</span><span class="cm">     */</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kd">super</span><span class="o">.</span><span class="na">getName</span><span class="o">();</span>
+    <span class="o">}</span>
+
+<span class="o">}</span></code></pre></div>
+<h4 id="usernamepasswordandfiltertoken-实现">UsernamePasswordAndFilterToken 实现</h4>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">UsernamePasswordAndFilterToken</span> <span class="kd">extends</span> <span class="n">UsernamePasswordToken</span> <span class="o">{</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * 
+</span><span class="cm">     */</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="n">1L</span><span class="o">;</span>
+    <span class="cm">/**
+</span><span class="cm">     * 存放当前Filter
+</span><span class="cm">     */</span>
+    <span class="kd">private</span> <span class="n">NameableFilter</span> <span class="n">loginFilter</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">UsernamePasswordAndFilterToken</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nf">UsernamePasswordAndFilterToken</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span> <span class="n">username</span><span class="o">,</span>
+            <span class="kd">final</span> <span class="kt">char</span><span class="o">[]</span> <span class="n">password</span><span class="o">,</span> <span class="kd">final</span> <span class="kt">boolean</span> <span class="n">rememberMe</span><span class="o">,</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">host</span><span class="o">,</span>
+            <span class="kd">final</span> <span class="n">AdviceFilter</span> <span class="n">loginFilter</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="n">username</span><span class="o">,</span> <span class="n">password</span><span class="o">,</span> <span class="n">rememberMe</span><span class="o">,</span> <span class="n">host</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">loginFilter</span> <span class="o">=</span> <span class="n">loginFilter</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nf">UsernamePasswordAndFilterToken</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span> <span class="n">username</span><span class="o">,</span>
+            <span class="kd">final</span> <span class="n">String</span> <span class="n">password</span><span class="o">,</span> <span class="kd">final</span> <span class="kt">boolean</span> <span class="n">rememberMe</span><span class="o">,</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">host</span><span class="o">,</span>
+            <span class="kd">final</span> <span class="n">AdviceFilter</span> <span class="n">loginFilter</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="n">username</span><span class="o">,</span> <span class="n">password</span><span class="o">,</span> <span class="n">rememberMe</span><span class="o">,</span> <span class="n">host</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">loginFilter</span> <span class="o">=</span> <span class="n">loginFilter</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="n">NameableFilter</span> <span class="nf">getLoginFilter</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">loginFilter</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setLoginFilter</span><span class="o">(</span><span class="n">NameableFilter</span> <span class="n">loginFilter</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">loginFilter</span> <span class="o">=</span> <span class="n">loginFilter</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
+<p>####DefineModularRealmAuthenticator 实现</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">DefineModularRealmAuthenticator</span> <span class="kd">extends</span> <span class="n">ModularRealmAuthenticator</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">log</span> <span class="o">=</span> <span class="n">LoggerFactory</span>
+            <span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">DefineModularRealmAuthenticator</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    
+    <span class="kd">private</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Realm</span><span class="o">&gt;</span> <span class="n">defineRealms</span><span class="o">;</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * 判断Realm是不是null
+</span><span class="cm">     */</span>
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">assertRealmsConfigured</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">IllegalStateException</span> <span class="o">{</span>
+        <span class="n">defineRealms</span> <span class="o">=</span> <span class="n">getDefineRealms</span><span class="o">();</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">CollectionUtils</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">(</span><span class="n">defineRealms</span><span class="o">))</span> <span class="o">{</span>
+            <span class="n">String</span> <span class="n">msg</span> <span class="o">=</span> <span class="s">&#34;Configuration error:  No realms have been configured!  One or more realms must be &#34;</span>
+                    <span class="o">+</span> <span class="s">&#34;present to execute an authentication attempt.&#34;</span><span class="o">;</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalStateException</span><span class="o">(</span><span class="n">msg</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="cm">/**
+</span><span class="cm">     * 根据filter的name 取对应realm进行登录
+</span><span class="cm">     */</span>
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="n">AuthenticationInfo</span> <span class="nf">doAuthenticate</span><span class="o">(</span>
+            <span class="n">AuthenticationToken</span> <span class="n">authenticationToken</span><span class="o">)</span>
+            <span class="kd">throws</span> <span class="n">AuthenticationException</span> <span class="o">{</span>
+        <span class="n">assertRealmsConfigured</span><span class="o">();</span>
+    
+        <span class="cm">/**
+</span><span class="cm">         * authenticationToken 如果是自定义的UsernamePasswordAndFilterToken，调用单个realm
+</span><span class="cm">         * 否则 使用默认的迭代realm方式
+</span><span class="cm">         */</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">authenticationToken</span> <span class="k">instanceof</span> <span class="n">UsernamePasswordAndFilterToken</span><span class="o">){</span>
+                <span class="n">NewFormAuthenticationFilter</span> <span class="n">loginFilter</span> <span class="o">=</span> <span class="o">(</span><span class="n">NewFormAuthenticationFilter</span><span class="o">)((</span><span class="n">UsernamePasswordAndFilterToken</span><span class="o">)</span> <span class="n">authenticationToken</span><span class="o">).</span><span class="na">getLoginFilter</span><span class="o">();</span>
+
+                <span class="n">Realm</span> <span class="n">realm</span> <span class="o">=</span> <span class="n">defineRealms</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">loginFilter</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
+                <span class="k">if</span><span class="o">(</span><span class="n">realm</span><span class="o">==</span><span class="kc">null</span><span class="o">){</span>
+                    <span class="n">log</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">&#34;没有配置NewFormAuthenticationFilter对应的Realm&#34;</span><span class="o">);</span>
+                    <span class="k">throw</span> <span class="k">new</span> <span class="n">RuntimeException</span><span class="o">(</span><span class="s">&#34;没有配置NewFormAuthenticationFilter对应的Realm&#34;</span><span class="o">);</span>
+                <span class="o">};</span>
+                <span class="k">return</span> <span class="n">doSingleRealmAuthentication</span><span class="o">(</span><span class="n">realm</span><span class="o">,</span><span class="n">authenticationToken</span><span class="o">);</span>
+        <span class="o">}</span><span class="k">else</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">oldDoAuthenticate</span><span class="o">(</span><span class="n">authenticationToken</span><span class="o">);</span>
+        <span class="o">}</span>
+            
+
+    <span class="o">}</span>
+
+    <span class="kd">private</span>  <span class="n">AuthenticationInfo</span> <span class="nf">oldDoAuthenticate</span><span class="o">(</span><span class="n">AuthenticationToken</span> <span class="n">authenticationToken</span><span class="o">)</span><span class="kd">throws</span> <span class="n">AuthenticationException</span><span class="o">{</span>
+        
+        <span class="n">Collection</span><span class="o">&lt;</span><span class="n">Realm</span><span class="o">&gt;</span> <span class="n">realms</span> <span class="o">=</span> <span class="n">defineRealms</span><span class="o">.</span><span class="na">values</span><span class="o">();</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">realms</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">==</span> <span class="n">1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">doSingleRealmAuthentication</span><span class="o">(</span><span class="n">realms</span><span class="o">.</span><span class="na">iterator</span><span class="o">().</span><span class="na">next</span><span class="o">(),</span> <span class="n">authenticationToken</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">doMultiRealmAuthentication</span><span class="o">(</span><span class="n">realms</span><span class="o">,</span> <span class="n">authenticationToken</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setDefineRealms</span><span class="o">(</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Realm</span><span class="o">&gt;</span> <span class="n">defineRealms</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">defineRealms</span> <span class="o">=</span> <span class="n">defineRealms</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Realm</span><span class="o">&gt;</span> <span class="nf">getDefineRealms</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">defineRealms</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></div>
+<p>####在xml中的配置修改为</p>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;shiroFilter&#34;</span> <span class="na">class=</span><span class="s">&#34;org.apache.shiro.spring.web.ShiroFilterFactoryBean&#34;</span><span class="nt">&gt;</span>
+        <span class="c">&lt;!-- shiro 的核心安全接口 --&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;securityManager&#34;</span> <span class="na">ref=</span><span class="s">&#34;securityManager&#34;</span> <span class="nt">/&gt;</span>
+        <span class="c">&lt;!-- 未授权时要跳转的连接 --&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;unauthorizedUrl&#34;</span> <span class="na">value=</span><span class="s">&#34;/unauthorized.jsp&#34;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;filters&#34;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;map&gt;</span>
+                <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&#34;admin&#34;</span> <span class="na">value-ref=</span><span class="s">&#34;adminformAuthenticationFilter&#34;</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&#34;authc&#34;</span> <span class="na">value-ref=</span><span class="s">&#34;formAuthenticationFilter&#34;</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;/map&gt;</span>
+        <span class="nt">&lt;/property&gt;</span>
+        <span class="c">&lt;!-- shiro 连接约束配置 --&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;filterChainDefinitions&#34;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;value&gt;</span>
+                /user.html = authc
+                /admin.html =authc
+                /login.html = authc
+                /admin/login.html =admin
+                /logout = logout
+                /resource/** = anon
+            <span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+    <span class="c">&lt;!-- filter&amp;realm绑定 --&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;DefineModularRealmAuthenticator&#34;</span>
+        <span class="na">class=</span><span class="s">&#34;cc.yihy.shiro.authc.pam.DefineModularRealmAuthenticator&#34;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;defineRealms&#34;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;map&gt;</span>
+                <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&#34;authc&#34;</span> <span class="na">value-ref=</span><span class="s">&#34;UserRealm&#34;</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&#34;admin&#34;</span> <span class="na">value-ref=</span><span class="s">&#34;AdminRealm&#34;</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;/map&gt;</span>
+        <span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;formAuthenticationFilter&#34;</span>
+        <span class="na">class=</span><span class="s">&#34;cc.yihy.shiro.filter.NewFormAuthenticationFilter&#34;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;loginUrl&#34;</span> <span class="na">value=</span><span class="s">&#34;/login.html&#34;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;successUrl&#34;</span> <span class="na">value=</span><span class="s">&#34;/ok.html&#34;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;adminformAuthenticationFilter&#34;</span>
+        <span class="na">class=</span><span class="s">&#34;cc.yihy.shiro.filter.NewFormAuthenticationFilter&#34;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;loginUrl&#34;</span> <span class="na">value=</span><span class="s">&#34;/admin/login.html&#34;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;successUrl&#34;</span> <span class="na">value=</span><span class="s">&#34;/admin/ok.html&#34;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;AdminRealm&#34;</span> <span class="na">class=</span><span class="s">&#34;cc.yihy.realm.AdminRealm&#34;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;userService&#34;</span> <span class="na">ref=</span><span class="s">&#34;UserService&#34;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;UserRealm&#34;</span> <span class="na">class=</span><span class="s">&#34;cc.yihy.realm.UserRealm&#34;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;userService&#34;</span> <span class="na">ref=</span><span class="s">&#34;UserService&#34;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+    <span class="c">&lt;!-- 安全管理器 --&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;securityManager&#34;</span> <span class="na">class=</span><span class="s">&#34;org.apache.shiro.web.mgt.DefaultWebSecurityManager&#34;</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- filter&amp;realm绑定 --&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;authenticator&#34;</span> <span class="na">ref=</span><span class="s">&#34;DefineModularRealmAuthenticator&#34;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;lifecycleBeanPostProcessor&#34;</span> <span class="na">class=</span><span class="s">&#34;org.apache.shiro.spring.LifecycleBeanPostProcessor&#34;</span> <span class="nt">/&gt;</span></code></pre></div>
+<p>到此，绑定工作完成。。。</p>
+
+<p>欢迎拍砖提问。
+用MarkDown写博客感觉还不错。
+表示差点把Shiro开始创建执行的过程写上去。</p>
+
+<h2 id="在后面进行页面上权限校验会报错-原因出在改变了realm的注入方式-解决办法-近期我会整理出来">在后面进行页面上权限校验会报错，原因出在改变了realm的注入方式。解决办法，近期我会整理出来。</h2>
+
+<h2 id="权限校验问题修复">权限校验问题修复</h2>
+
+<p>权限校验会报错是因为修改了注入realm的位置，导致授权解释器拿不到realm集合，现在把授权解释器重写了，并注入realms，使其恢复正常</p>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- realms Map --&gt;</span>
+
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;defineRealms&#34;</span> <span class="na">class=</span><span class="s">&#34;org.springframework.beans.factory.config.MapFactoryBean&#34;</span><span class="nt">&gt;</span>
+
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;sourceMap&#34;</span><span class="nt">&gt;</span>
+
+            <span class="nt">&lt;map&gt;</span>
+
+                <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&#34;authc&#34;</span> <span class="na">value-ref=</span><span class="s">&#34;SSOUserRealm&#34;</span><span class="nt">/&gt;</span>
+
+                <span class="c">&lt;!--&lt;entry key=&#34;NormalUser&#34; value-ref=&#34;UserRealm&#34;/&gt;--&gt;</span>
+
+                <span class="c">&lt;!--&lt;entry key=&#34;authUser&#34; value-ref=&#34;UserRealm&#34;/&gt;--&gt;</span>
+
+                <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&#34;SSOUser&#34;</span> <span class="na">value-ref=</span><span class="s">&#34;SSOUserRealm&#34;</span><span class="nt">/&gt;</span>
+
+
+                <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&#34;mxUser&#34;</span> <span class="na">value-ref=</span><span class="s">&#34;AUserRealm&#34;</span><span class="nt">/&gt;</span>
+
+                <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&#34;normalMx&#34;</span> <span class="na">value-ref=</span><span class="s">&#34;AUserRealm&#34;</span><span class="nt">/&gt;</span>
+
+                <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&#34;mxAdmin&#34;</span> <span class="na">value-ref=</span><span class="s">&#34;AUserRealm&#34;</span><span class="nt">/&gt;</span>
+
+                <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&#34;subMxAdmin&#34;</span> <span class="na">value-ref=</span><span class="s">&#34;AUserRealm&#34;</span><span class="nt">/&gt;</span>
+
+
+                <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&#34;xhAdmin&#34;</span> <span class="na">value-ref=</span><span class="s">&#34;XhUserRealm&#34;</span><span class="nt">/&gt;</span>
+
+                <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&#34;xhUser&#34;</span> <span class="na">value-ref=</span><span class="s">&#34;XhUserRealm&#34;</span><span class="nt">/&gt;</span>
+
+                <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">&#34;subXhUser&#34;</span> <span class="na">value-ref=</span><span class="s">&#34;XhUserRealm&#34;</span><span class="nt">/&gt;</span>
+
+            <span class="nt">&lt;/map&gt;</span>
+
+        <span class="nt">&lt;/property&gt;</span>
+
+    <span class="nt">&lt;/bean&gt;</span>
+
+ <span class="c">&lt;!-- filter&amp;realm绑定 --&gt;</span>
+    <span class="c">&lt;!--认证解释器--&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;DefineModularRealmAuthenticator&#34;</span>
+
+          <span class="na">class=</span><span class="s">&#34;cc.yihy.shiro.authc.pam.DefineModularRealmAuthenticator&#34;</span><span class="nt">&gt;</span>
+
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;defineRealms&#34;</span> <span class="na">ref=</span><span class="s">&#34;defineRealms&#34;</span><span class="nt">/&gt;</span>
+
+    <span class="nt">&lt;/bean&gt;</span>
+
+
+    <span class="c">&lt;!--授权解释器--&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;DefineModularRealmAuthorizer&#34;</span>
+
+          <span class="na">class=</span><span class="s">&#34;cc.yihy.shiro.authz.DefineModularRealmAuthorizer&#34;</span><span class="nt">&gt;</span>
+
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;defineRealms&#34;</span> <span class="na">ref=</span><span class="s">&#34;defineRealms&#34;</span><span class="nt">/&gt;</span>
+
+    <span class="nt">&lt;/bean&gt;</span>
+
+ <span class="c">&lt;!-- securityManager安全管理器 --&gt;</span>
+
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;securityManager&#34;</span> <span class="na">class=</span><span class="s">&#34;org.apache.shiro.web.mgt.DefaultWebSecurityManager&#34;</span><span class="nt">&gt;</span>
+
+
+        <span class="c">&lt;!-- filter&amp;realm绑定 登录 --&gt;</span>
+
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;authenticator&#34;</span> <span class="na">ref=</span><span class="s">&#34;DefineModularRealmAuthenticator&#34;</span><span class="nt">/&gt;</span>
+
+        <span class="c">&lt;!-- filter&amp;realm绑定 角色权限验证 --&gt;</span>
+
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;authorizer&#34;</span> <span class="na">ref=</span><span class="s">&#34;DefineModularRealmAuthorizer&#34;</span><span class="nt">/&gt;</span>
+
+        <span class="c">&lt;!-- 注入缓存管理器 --&gt;</span>
+
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;cacheManager&#34;</span> <span class="na">ref=</span><span class="s">&#34;ShiroCacheManager&#34;</span><span class="nt">/&gt;</span>
+
+        <span class="c">&lt;!-- 注入session管理器 --&gt;</span>
+
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;sessionManager&#34;</span> <span class="na">ref=</span><span class="s">&#34;sessionManager&#34;</span><span class="nt">/&gt;</span>
+
+        <span class="c">&lt;!-- 记住我 --&gt;</span>
+
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;rememberMeManager&#34;</span> <span class="na">ref=</span><span class="s">&#34;rememberMeManager&#34;</span><span class="nt">/&gt;</span>
+
+    <span class="nt">&lt;/bean&gt;</span></code></pre></div><div class="edit-meta">更新时间 0001-01-01 / 发布时间 0001-01-01<br></div><nav class="pagination"><a class="nav nav-prev" href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/spring-data-jpa-%E6%9F%A5%E8%AF%A2%E5%85%B3%E9%94%AE%E5%AD%97/" title="Spring Data Jpa 查询关键字"><i class="fas fa-arrow-left" aria-hidden="true"></i> Prev - Spring Data Jpa 查询关键字</a>
+<a class="nav nav-next" href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/shiroshiro%E6%95%B4%E5%90%88spring-boot-%E8%87%AA%E5%8A%A8%E5%8C%96%E9%85%8D%E7%BD%AE/" title="[Shiro]Shiro整合Spring-Boot-自动化配置">Next - [Shiro]Shiro整合Spring-Boot-自动化配置 <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+</nav><footer><p class="powered">Powered by <a href="https://gohugo.io">Hugo</a>. Theme by <a href="https://themes.gohugo.io/hugo-theme-techdoc/">TechDoc</a>. Designed by <a href="https://github.com/thingsym/hugo-theme-techdoc">Thingsym</a>.</p>
+</footer>
+</main><div class="sidebar">
+<nav>
+<ul>
+<li class=""><a href="http://www.1move.life/">Home</a></li>
+
+
+
+<li class="parent"><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/">技术文章s</a>
+<ul class="sub-menu">
+<li class=""><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/jsoupjsoup-html%E9%A1%B5%E9%9D%A2%E5%A4%84%E7%90%86%E7%AE%80%E5%8D%95%E7%94%A8%E6%B3%95/">Jsoup  Html页面处理简单用法</a></li>
+<li class=""><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/shiro%E5%A4%9Arealm%E6%97%B6%E6%8C%87%E5%AE%9A%E7%99%BB%E5%BD%95realm/">多Realm时，指定登录Realm</a></li>
+<li class=""><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/java%E5%9F%BA%E7%A1%80-bean%E7%B1%BB%E5%9F%BA%E6%9C%AC%E6%96%B9%E6%B3%95%E9%87%8D%E5%86%99/">类基本方法（toString、hashCode、equals、compareTo）重写</a></li>
+<li class=""><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/github%E9%A1%B9%E7%9B%AE%E4%BD%BF%E7%94%A8ci%E6%9E%84%E5%BB%BA%E6%8C%87%E5%8D%97/">Github项目使用多CI构建指南</a></li>
+<li class=""><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/spring-data-jpa-%E6%9F%A5%E8%AF%A2%E5%85%B3%E9%94%AE%E5%AD%97/">Spring Data Jpa 查询关键字</a></li>
+<li class="active"><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/shiro-filterrealm%E7%BB%91%E5%AE%9A-%E5%A4%9A%E7%99%BB%E9%99%86%E5%85%A5%E5%8F%A3%E5%8C%BA%E5%88%86%E5%89%8D%E5%90%8E%E5%8F%B0/">[Shiro]-filter&amp;realm绑定--多登陆入口，区分前后台</a></li>
+<li class=""><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/shiroshiro%E6%95%B4%E5%90%88spring-boot-%E8%87%AA%E5%8A%A8%E5%8C%96%E9%85%8D%E7%BD%AE/">[Shiro]Shiro整合Spring-Boot-自动化配置</a></li>
+<li class=""><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/tooljquery%E8%A1%A8%E6%A0%BC%E6%8F%92%E4%BB%B6datatables-%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AB%AF%E5%8F%82%E6%95%B0%E8%A7%A3%E6%9E%90%E5%B7%A5%E5%85%B7/">jQuery表格插件DataTables  的服务器端参数解析工具</a></li>
+<li class=""><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/mybatis-maven-%E9%85%8D%E7%BD%AEmybatis%E5%8F%8D%E5%90%91%E7%94%9F%E6%88%90/">配置mybatis反向生成</a></li>
+</ul>
+  
+</li>
+
+<li class=""><a href="/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/">日常问题s</a>
+<ul class="">
+<li class=""><a href="/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/idea%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7idea-%E6%9C%AC%E5%9C%B0%E5%8C%96%E6%8C%87%E5%8D%97-%E7%BF%BB%E8%AF%91%E8%87%AAidea%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/">Idea  本地化指南</a></li>
+<li class=""><a href="/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/%E8%BD%AC%E8%BD%BDthymeleaf%E5%8F%82%E8%80%83%E6%89%8B%E5%86%8C/">[转载]Thymeleaf参考手册.md</a></li>
+<li class=""><a href="/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/osx-%E8%A7%A3%E5%86%B3%E6%B5%81%E6%B0%93%E8%BD%AF%E4%BB%B6mplayx%E5%8F%B3%E4%B8%8A%E8%A7%92%E9%80%9A%E7%9F%A5%E5%B9%BF%E5%91%8A%E9%97%AE%E9%A2%98/">osx 解决右上角通知广告问题</a></li>
+<li class=""><a href="/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/idea%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7idea-%E6%B1%89%E5%8C%96%E4%B8%AD%E6%96%87%E5%8C%96%E6%95%99%E7%A8%8B/">[Idea]开发工具IDEA-汉化(中文化)教程</a></li>
+</ul>
+  
+</li>
+</ul>
+</nav>
+
+
+<div class="sidebar-footer"></div>
+</div>
+</div><a href="#" id="backtothetop-fixed" class="backtothetop"
+ data-backtothetop-duration="600"
+ data-backtothetop-easing="easeOutQuart"
+ data-backtothetop-fixed-fadeIn="1000"
+ data-backtothetop-fixed-fadeOut="1000"
+ data-backtothetop-fixed-bottom="10"
+ data-backtothetop-fixed-right="20">
+<span class="fa-layers fa-fw">
+<i class="fas fa-circle"></i>
+<i class="fas fa-arrow-circle-up"></i>
+</span></a>
+</div>
+</body>
+</html>

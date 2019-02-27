@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>念去去云的博文</title>
+    <link>http://www.1move.life/</link>
+    <description>Recent content on 念去去云的博文</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Tue, 17 Oct 2017 15:26:15 +0000</lastBuildDate>
+    
+	<atom:link href="http://www.1move.life/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>友链</title>
+      <link>http://www.1move.life/links/</link>
+      <pubDate>Wed, 09 Apr 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.1move.life/links/</guid>
+      <description>Ritchie and his friends.</description>
+    </item>
+    
+    <item>
+      <title>关于</title>
+      <link>http://www.1move.life/about/</link>
+      <pubDate>Sat, 08 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.1move.life/about/</guid>
+      <description>关于我 这是关于我的页面</description>
+    </item>
+    
+    <item>
+      <title>Idea  本地化指南</title>
+      <link>http://www.1move.life/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/idea%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7idea-%E6%9C%AC%E5%9C%B0%E5%8C%96%E6%8C%87%E5%8D%97-%E7%BF%BB%E8%AF%91%E8%87%AAidea%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/</link>
+      <pubDate>Sun, 26 Nov 2017 13:47:08 +0200</pubDate>
+      
+      <guid>http://www.1move.life/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/idea%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7idea-%E6%9C%AC%E5%9C%B0%E5%8C%96%E6%8C%87%E5%8D%97-%E7%BF%BB%E8%AF%91%E8%87%AAidea%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/</guid>
+      <description>标题：Idea 本地化指南 翻译自 IntelliJ平台SDK 开发指南 该文档的目的是描述创建IDEA的本地化版本所需的步骤。 —————— 应用程序包</description>
+    </item>
+    
+    <item>
+      <title>Jsoup  Html页面处理简单用法</title>
+      <link>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/jsoupjsoup-html%E9%A1%B5%E9%9D%A2%E5%A4%84%E7%90%86%E7%AE%80%E5%8D%95%E7%94%A8%E6%B3%95/</link>
+      <pubDate>Sun, 26 Nov 2017 13:47:08 +0200</pubDate>
+      
+      <guid>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/jsoupjsoup-html%E9%A1%B5%E9%9D%A2%E5%A4%84%E7%90%86%E7%AE%80%E5%8D%95%E7%94%A8%E6%B3%95/</guid>
+      <description>#[Jsoup Html页面处理简单用法] Jsoup工具可以把html文本映射为Dom对象，用更简单的操作html。 1. 从一个URL，文件或字符串中解析HT</description>
+    </item>
+    
+    <item>
+      <title>[转载]Thymeleaf参考手册.md</title>
+      <link>http://www.1move.life/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/%E8%BD%AC%E8%BD%BDthymeleaf%E5%8F%82%E8%80%83%E6%89%8B%E5%86%8C/</link>
+      <pubDate>Sun, 26 Nov 2017 13:47:08 +0200</pubDate>
+      
+      <guid>http://www.1move.life/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/%E8%BD%AC%E8%BD%BDthymeleaf%E5%8F%82%E8%80%83%E6%89%8B%E5%86%8C/</guid>
+      <description>转载自 http://blog.csdn.net/zrk1000/article/details/72667478 1、创建 html &amp;lt;!DOCTYPE html&amp;gt;&amp;lt;html xmlns:th=&amp;quot;http://www.thymeleaf.org&amp;quot;&amp;gt;&amp;lt;/html&amp;gt; 另外：xmlns:layout=&amp;quot;http://www.ultraq.net.nz/web/thymele</description>
+    </item>
+    
+    <item>
+      <title>osx 解决右上角通知广告问题</title>
+      <link>http://www.1move.life/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/osx-%E8%A7%A3%E5%86%B3%E6%B5%81%E6%B0%93%E8%BD%AF%E4%BB%B6mplayx%E5%8F%B3%E4%B8%8A%E8%A7%92%E9%80%9A%E7%9F%A5%E5%B9%BF%E5%91%8A%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Sun, 26 Nov 2017 13:47:08 +0200</pubDate>
+      
+      <guid>http://www.1move.life/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/osx-%E8%A7%A3%E5%86%B3%E6%B5%81%E6%B0%93%E8%BD%AF%E4%BB%B6mplayx%E5%8F%B3%E4%B8%8A%E8%A7%92%E9%80%9A%E7%9F%A5%E5%B9%BF%E5%91%8A%E9%97%AE%E9%A2%98/</guid>
+      <description>osx 解决右上角通知广告问题 新入了mac，安装视频播放软件时候，遇到了流氓软件MplayX,这个软件有官网，我是从官网下载。安装打开后，它让你在</description>
+    </item>
+    
+    <item>
+      <title>多Realm时，指定登录Realm</title>
+      <link>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/shiro%E5%A4%9Arealm%E6%97%B6%E6%8C%87%E5%AE%9A%E7%99%BB%E5%BD%95realm/</link>
+      <pubDate>Sun, 26 Nov 2017 13:47:08 +0200</pubDate>
+      
+      <guid>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/shiro%E5%A4%9Arealm%E6%97%B6%E6%8C%87%E5%AE%9A%E7%99%BB%E5%BD%95realm/</guid>
+      <description>[Shiro]多Realm时，指定登录Realm 之前写过多Realm登录前后台区分问题，实现了当时的需求，可是再下一步的时候，角色与权限校验</description>
+    </item>
+    
+    <item>
+      <title>用简书开始写博客</title>
+      <link>http://www.1move.life/post/%E6%97%A5%E8%AE%B0%E6%9C%AC/%E7%94%A8%E7%AE%80%E4%B9%A6%E5%BC%80%E5%A7%8B%E5%86%99%E5%8D%9A%E5%AE%A2/</link>
+      <pubDate>Sun, 26 Nov 2017 13:47:08 +0200</pubDate>
+      
+      <guid>http://www.1move.life/post/%E6%97%A5%E8%AE%B0%E6%9C%AC/%E7%94%A8%E7%AE%80%E4%B9%A6%E5%BC%80%E5%A7%8B%E5%86%99%E5%8D%9A%E5%AE%A2/</guid>
+      <description>最近晚上太无聊了，刷了刷简书，各种文章挺多的。看的我都想写写写博客了。我觉得还是很有必要整理整理用到过的技术以及坑点，不然时间一长都混了。作</description>
+    </item>
+    
+    <item>
+      <title>类基本方法（toString、hashCode、equals、compareTo）重写</title>
+      <link>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/java%E5%9F%BA%E7%A1%80-bean%E7%B1%BB%E5%9F%BA%E6%9C%AC%E6%96%B9%E6%B3%95%E9%87%8D%E5%86%99/</link>
+      <pubDate>Sun, 26 Nov 2017 13:47:08 +0200</pubDate>
+      
+      <guid>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/java%E5%9F%BA%E7%A1%80-bean%E7%B1%BB%E5%9F%BA%E6%9C%AC%E6%96%B9%E6%B3%95%E9%87%8D%E5%86%99/</guid>
+      <description>类基本方法（toString、hashCode、equals、compareTo）重写 使用jar包为 apache的commons集lang包</description>
+    </item>
+    
+    <item>
+      <title>Github项目使用多CI构建指南</title>
+      <link>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/github%E9%A1%B9%E7%9B%AE%E4%BD%BF%E7%94%A8ci%E6%9E%84%E5%BB%BA%E6%8C%87%E5%8D%97/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/github%E9%A1%B9%E7%9B%AE%E4%BD%BF%E7%94%A8ci%E6%9E%84%E5%BB%BA%E6%8C%87%E5%8D%97/</guid>
+      <description>Github项目使用多CI构建指南 起因 我最近在捣鼓电子书，用python写了一个脚本转换工具，写的脚本为了使用方便，用pyinstaller</description>
+    </item>
+    
+    <item>
+      <title>Spring Data Jpa 查询关键字</title>
+      <link>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/spring-data-jpa-%E6%9F%A5%E8%AF%A2%E5%85%B3%E9%94%AE%E5%AD%97/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/spring-data-jpa-%E6%9F%A5%E8%AF%A2%E5%85%B3%E9%94%AE%E5%AD%97/</guid>
+      <description>Spring Data Jpa 查询关键字 find可以换成count、delete、get等等 关键字 示例 同功能JPQL And findByLastnameAndFirstname where x.lastname = ?1 and x.firstname = ?2 Or findByLastnameOrFirstname where x.lastname = ?1 or x.firstname = ?2 Is,Equals findByFirstname,findByFirstnameIs,findByFirstnameEquals where x.firstname</description>
+    </item>
+    
+    <item>
+      <title>[Idea]开发工具IDEA-汉化(中文化)教程</title>
+      <link>http://www.1move.life/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/idea%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7idea-%E6%B1%89%E5%8C%96%E4%B8%AD%E6%96%87%E5%8C%96%E6%95%99%E7%A8%8B/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.1move.life/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/idea%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7idea-%E6%B1%89%E5%8C%96%E4%B8%AD%E6%96%87%E5%8C%96%E6%95%99%E7%A8%8B/</guid>
+      <description>开发工具IDEA 汉化(中文化)教程 IDEA 全称 IntelliJ IDEA，是java语言开发的集成环境，IntelliJ在业界被公认为最好的java开发工具之一，</description>
+    </item>
+    
+    <item>
+      <title>[Shiro]-filter&amp;realm绑定--多登陆入口，区分前后台</title>
+      <link>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/shiro-filterrealm%E7%BB%91%E5%AE%9A-%E5%A4%9A%E7%99%BB%E9%99%86%E5%85%A5%E5%8F%A3%E5%8C%BA%E5%88%86%E5%89%8D%E5%90%8E%E5%8F%B0/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/shiro-filterrealm%E7%BB%91%E5%AE%9A-%E5%A4%9A%E7%99%BB%E9%99%86%E5%85%A5%E5%8F%A3%E5%8C%BA%E5%88%86%E5%89%8D%E5%90%8E%E5%8F%B0/</guid>
+      <description>Shiro框架 filter&amp;amp;realm绑定 这种实现方式有问题，会影响到后续的角色验证。不建议看了 新的实现方式 ： 自定义Token shiro fi</description>
+    </item>
+    
+    <item>
+      <title>[Shiro]Shiro整合Spring-Boot-自动化配置</title>
+      <link>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/shiroshiro%E6%95%B4%E5%90%88spring-boot-%E8%87%AA%E5%8A%A8%E5%8C%96%E9%85%8D%E7%BD%AE/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/shiroshiro%E6%95%B4%E5%90%88spring-boot-%E8%87%AA%E5%8A%A8%E5%8C%96%E9%85%8D%E7%BD%AE/</guid>
+      <description>Spring Boot 简化了spring大量的xml配置，使用了Java Config的配置，同时又提供了自动化配置工具。在引入新的组件时，只需要在配置文件上添</description>
+    </item>
+    
+    <item>
+      <title>jQuery表格插件DataTables  的服务器端参数解析工具</title>
+      <link>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/tooljquery%E8%A1%A8%E6%A0%BC%E6%8F%92%E4%BB%B6datatables-%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AB%AF%E5%8F%82%E6%95%B0%E8%A7%A3%E6%9E%90%E5%B7%A5%E5%85%B7/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/tooljquery%E8%A1%A8%E6%A0%BC%E6%8F%92%E4%BB%B6datatables-%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AB%AF%E5%8F%82%E6%95%B0%E8%A7%A3%E6%9E%90%E5%B7%A5%E5%85%B7/</guid>
+      <description>jQuery表格插件DataTables 的服务器端参数解析工具 分页，即时搜索和排序 几乎支持任何数据源：DOM， javascript， Ajax 和 服务</description>
+    </item>
+    
+    <item>
+      <title>配置mybatis反向生成</title>
+      <link>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/mybatis-maven-%E9%85%8D%E7%BD%AEmybatis%E5%8F%8D%E5%90%91%E7%94%9F%E6%88%90/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/mybatis-maven-%E9%85%8D%E7%BD%AEmybatis%E5%8F%8D%E5%90%91%E7%94%9F%E6%88%90/</guid>
+      <description>1 配置pom.xml 新建Maven项目，在pom.xml文件中配置 &amp;lt;build&amp;gt; &amp;lt;plugins&amp;gt; &amp;lt;plugin&amp;gt; &amp;lt;groupId&amp;gt;org.mybatis.generator&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;mybatis-generator-maven-plugin&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;1.3.2&amp;lt;/version&amp;gt; &amp;lt;configuration&amp;gt; &amp;lt;verbose&amp;gt;true&amp;lt;/verbose&amp;gt; &amp;lt;overwrite&amp;gt;true&amp;lt;/overwrite&amp;gt; &amp;lt;/configuration&amp;gt; &amp;lt;/plugin&amp;gt; &amp;lt;/plugins&amp;gt; &amp;lt;/build&amp;gt; 配置generatorConfig.xml 生成的</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>日常问题s on 念去去云的博文</title>
+    <link>http://www.1move.life/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/</link>
+    <description>Recent content in 日常问题s on 念去去云的博文</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 26 Nov 2017 13:47:08 +0200</lastBuildDate>
+    
+	<atom:link href="http://www.1move.life/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Idea  本地化指南</title>
+      <link>http://www.1move.life/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/idea%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7idea-%E6%9C%AC%E5%9C%B0%E5%8C%96%E6%8C%87%E5%8D%97-%E7%BF%BB%E8%AF%91%E8%87%AAidea%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/</link>
+      <pubDate>Sun, 26 Nov 2017 13:47:08 +0200</pubDate>
+      
+      <guid>http://www.1move.life/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/idea%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7idea-%E6%9C%AC%E5%9C%B0%E5%8C%96%E6%8C%87%E5%8D%97-%E7%BF%BB%E8%AF%91%E8%87%AAidea%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/</guid>
+      <description>标题：Idea 本地化指南 翻译自 IntelliJ平台SDK 开发指南 该文档的目的是描述创建IDEA的本地化版本所需的步骤。 —————— 应用程序包</description>
+    </item>
+    
+    <item>
+      <title>[转载]Thymeleaf参考手册.md</title>
+      <link>http://www.1move.life/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/%E8%BD%AC%E8%BD%BDthymeleaf%E5%8F%82%E8%80%83%E6%89%8B%E5%86%8C/</link>
+      <pubDate>Sun, 26 Nov 2017 13:47:08 +0200</pubDate>
+      
+      <guid>http://www.1move.life/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/%E8%BD%AC%E8%BD%BDthymeleaf%E5%8F%82%E8%80%83%E6%89%8B%E5%86%8C/</guid>
+      <description>转载自 http://blog.csdn.net/zrk1000/article/details/72667478 1、创建 html &amp;lt;!DOCTYPE html&amp;gt;&amp;lt;html xmlns:th=&amp;quot;http://www.thymeleaf.org&amp;quot;&amp;gt;&amp;lt;/html&amp;gt; 另外：xmlns:layout=&amp;quot;http://www.ultraq.net.nz/web/thymele</description>
+    </item>
+    
+    <item>
+      <title>osx 解决右上角通知广告问题</title>
+      <link>http://www.1move.life/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/osx-%E8%A7%A3%E5%86%B3%E6%B5%81%E6%B0%93%E8%BD%AF%E4%BB%B6mplayx%E5%8F%B3%E4%B8%8A%E8%A7%92%E9%80%9A%E7%9F%A5%E5%B9%BF%E5%91%8A%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Sun, 26 Nov 2017 13:47:08 +0200</pubDate>
+      
+      <guid>http://www.1move.life/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/osx-%E8%A7%A3%E5%86%B3%E6%B5%81%E6%B0%93%E8%BD%AF%E4%BB%B6mplayx%E5%8F%B3%E4%B8%8A%E8%A7%92%E9%80%9A%E7%9F%A5%E5%B9%BF%E5%91%8A%E9%97%AE%E9%A2%98/</guid>
+      <description>osx 解决右上角通知广告问题 新入了mac，安装视频播放软件时候，遇到了流氓软件MplayX,这个软件有官网，我是从官网下载。安装打开后，它让你在</description>
+    </item>
+    
+    <item>
+      <title>[Idea]开发工具IDEA-汉化(中文化)教程</title>
+      <link>http://www.1move.life/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/idea%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7idea-%E6%B1%89%E5%8C%96%E4%B8%AD%E6%96%87%E5%8C%96%E6%95%99%E7%A8%8B/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://www.1move.life/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/idea%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7idea-%E6%B1%89%E5%8C%96%E4%B8%AD%E6%96%87%E5%8C%96%E6%95%99%E7%A8%8B/</guid>
+      <description>开发工具IDEA 汉化(中文化)教程 IDEA 全称 IntelliJ IDEA，是java语言开发的集成环境，IntelliJ在业界被公认为最好的java开发工具之一，</description>
+    </item>
+    
+  </channel>
+</rss>

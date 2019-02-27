@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Github项目使用多CI构建指南 - 念去去云的博文</title>
+<meta name="description" content="博客小站">
+<meta name="generator" content="Hugo 0.52" />
+<link href="http://www.1move.life/index.xml" rel="alternate" type="application/rss+xml">
+<link rel="canonical" href="http://www.1move.life/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/github%E9%A1%B9%E7%9B%AE%E4%BD%BF%E7%94%A8ci%E6%9E%84%E5%BB%BA%E6%8C%87%E5%8D%97/">
+<link rel="stylesheet" href="http://www.1move.life/css/theme.min.css">
+<script src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+<link rel="stylesheet" href="http://www.1move.life/css/chroma.min.css">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="http://www.1move.life/js/functions.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery.easing@1.4.1/jquery.easing.min.js"></script>
+<script src="http://www.1move.life/js/jquery.backtothetop/jquery.backtothetop.min.js"></script></head>
+<body>
+<div class="container"><header>
+<h1>念去去云的博文</h1>
+
+<p class="description">博客小站</p>
+
+</header>
+<div class="menu">
+<nav>
+<ul>
+<li><a href="/links/">友链</a></li>
+<li><a href="/about/">关于</a></li></ul>
+</nav>
+</div>
+<div class="content-container">
+<main><h1>Github项目使用多CI构建指南</h1>
+
+<h1 id="github项目使用多ci构建指南">Github项目使用多CI构建指南</h1>
+
+<h2 id="起因">起因</h2>
+
+<p>我最近在捣鼓电子书，用python写了一个脚本转换工具，写的脚本为了使用方便，用pyinstaller打包，生成多平台（macos、linux、windows）的执行文件。打包出windows可执行文件需要在windows上编译，不同平台的可执行文件需要在不同的平台上编译，三个平台打包下来。收集文件后再一个个上传到github的releases，真的是非常麻烦，本来我只是想写个脚本省事，结果却因为打包上传耗费大量的时间。</p>
+
+<p>怎么解决这个问题呢？项目放在github上面，在github上面有一些免费的CI服务，
+比如travis-ci、appveyor等构建服务。
+写的项目放在github上面，github上面有一些开源的免费的CI服务</p>
+
+<p><a href="https://github.com/Yihy/convert-ebook">convert-ebook</a>这个是工具项目的地址，大家可以参照我的配置，配置自己的多平台构件</p>
+
+<h2 id="构建服务介绍">构建服务介绍</h2>
+
+<p>我使用travis-ci、appveyor这两个解决了构建问题。CI服务使用配置文件执行构建项目。
+下面我就以我写的工具为例介绍，如何使用两个服务自动构建项目。
+使用travis-ci构建linux、macos版本的可执行文件，使用appveyor构建windows可执行文件</p>
+
+<h3 id="travis-ci">travis-ci</h3>
+
+<p>travis-ci网址 <a href="https://travis-ci.org">https://travis-ci.org</a> ，打开后直接使用github登录就行，按提示添加项目就行。</p>
+
+<p>使用<code>.travis.yml</code>文件组织构建，文件需要存放在项目根目录，如图
+<img src="http://md.yihy.cc/2019-02-24-15510153267733.jpg" alt="-w309" />
+travis-ci支持linux、macos镜像，多种语言、构建工具打包项目。</p>
+
+<p>贴配置</p>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># 管理员权限</span><span class="w">
+</span><span class="w"></span>sudo<span class="p">:</span><span class="w"> </span>required<span class="w">
+</span><span class="w"></span><span class="c"># 使用python环境</span><span class="w">
+</span><span class="w"></span>language<span class="p">:</span><span class="w"> </span>python<span class="w">
+</span><span class="w"></span><span class="c"># python版本</span><span class="w">
+</span><span class="w"></span>python<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span><span class="s2">&#34;3.5.1&#34;</span><span class="w">
+</span><span class="w"></span>matrix<span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="c"># 使用的系统镜像（osx、linux）</span><span class="w">
+</span><span class="w">  </span>include<span class="p">:</span><span class="w">
+</span><span class="w">    </span>-<span class="w"> </span>os<span class="p">:</span><span class="w"> </span>osx<span class="w">
+</span><span class="w">      </span><span class="c"># travis-ci osx镜像使用python3有问题，会导致构建失败。这里使用generic覆盖上面的python</span><span class="w">
+</span><span class="w">      </span>language<span class="p">:</span><span class="w"> </span>generic<span class="w">
+</span><span class="w">    </span>-<span class="w"> </span>os<span class="p">:</span><span class="w"> </span>linux<span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="c"># 执行安装前，用shell做的一些额外的操作。这里用来处理osx python版本的问题</span><span class="w">
+</span><span class="w"></span>before_install<span class="p">:</span><span class="w"> </span><span class="sd">|
+</span><span class="sd">  if [ &#34;$TRAVIS_OS_NAME&#34; == &#34;osx&#34; ]; then
+</span><span class="sd">    # 我测试了ci的osx镜像，发现存在python3，我需要python指向的版本是2的
+</span><span class="sd">    sudo ln -f $(which python3) $(which python)
+</span><span class="sd">    sudo ln -f $(which pip3) $(which pip)
+</span><span class="sd">    python --version
+</span><span class="sd">  fi</span><span class="w">
+</span><span class="w"></span><span class="c"># 准备需要的构建环境</span><span class="w">
+</span><span class="w"></span>install<span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="c"># 安装需要使用依赖包</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>threadpool<span class="w">
+</span><span class="w">  </span><span class="c"># 安装构建工具</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>pyinstaller<span class="w">
+</span><span class="w"></span><span class="c"># 构建项目</span><span class="w">
+</span><span class="w"></span>script<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>pyinstaller<span class="w"> </span>./convert-ebook.py<span class="w"> </span>-F<span class="w"> </span>--add-data<span class="w"> </span>./lib/kindlegen<span class="p">:</span>lib/kindlegen<span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>mv<span class="w"> </span>./dist/convert-ebook<span class="w"> </span>./dist/convert-ebook-$TRAVIS_OS_NAME<span class="w">
+</span><span class="w"></span><span class="c"># 发布项目</span><span class="w">
+</span><span class="w"></span>deploy<span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="c"># 标志发布到github的releases</span><span class="w">
+</span><span class="w">  </span>provider<span class="p">:</span><span class="w"> </span>releases<span class="w">
+</span><span class="w">  </span><span class="c"># 发布使用的文件或目录</span><span class="w">
+</span><span class="w">  </span>file<span class="p">:</span><span class="w"> </span><span class="s2">&#34;dist/convert-ebook-$TRAVIS_OS_NAME&#34;</span><span class="w">
+</span><span class="w">  </span><span class="c"># 发布到github需要使用的token</span><span class="w">
+</span><span class="w">  </span>api_key<span class="p">:</span><span class="w"> </span>$api_key<span class="w">
+</span><span class="w">  </span><span class="c"># 跳过清理文件 发布文件时，一定要配置为true</span><span class="w">
+</span><span class="w">  </span>skip_cleanup<span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">  </span><span class="c"># 如果发布时，存在相同的tag版本，继续上传</span><span class="w">
+</span><span class="w">  </span><span class="c"># 这一步很关键，多个构件发布releases，存在相同tag会写入到该releases中</span><span class="w">
+</span><span class="w">  </span>overwrite<span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">  </span><span class="c"># 触发条件，</span><span class="w">
+</span><span class="w">  </span>on<span class="p">:</span><span class="w">
+</span><span class="w">    </span>branch<span class="p">:</span><span class="w"> </span>master<span class="w">
+</span><span class="w">    </span><span class="c"># 必须存在tag时才能发布</span><span class="w">
+</span><span class="w">    </span>tags<span class="p">:</span><span class="w"> </span><span class="kc">true</span></code></pre></div>
+<h3 id="appveyor">appveyor</h3>
+
+<p>appveyor网址 <a href="https://ci.appveyor.com">https://ci.appveyor.com</a> ，打开后直接使用github登录就行，按提示添加项目就行。
+appveyor支持用windows、ubuntu等镜像</p>
+
+<p>需要使用<code>appveyor.yml</code>文件组织构件，文件需要存放在项目根目录，如上一张图</p>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml">environment<span class="p">:</span><span class="w">
+</span><span class="w">  </span>matrix<span class="p">:</span><span class="w">
+</span><span class="w">    </span>-<span class="w"> </span>PYTHON<span class="p">:</span><span class="w"> </span><span class="s2">&#34;C:\\Python36&#34;</span><span class="w">
+</span><span class="w">      </span>PYTHON_VERSION<span class="p">:</span><span class="w"> </span><span class="s2">&#34;3.6.x&#34;</span><span class="w"> </span><span class="c"># currently 3.6.5</span><span class="w">
+</span><span class="w">      </span>PYTHON_ARCH<span class="p">:</span><span class="w"> </span><span class="s2">&#34;32&#34;</span><span class="w">
+</span><span class="w"></span><span class="c"># 安装python</span><span class="w">
+</span><span class="w"></span>install<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>ps<span class="p">:</span><span class="w"> </span>if<span class="w"> </span>($env<span class="p">:</span>APPVEYOR_PULL_REQUEST_NUMBER<span class="w"> </span>-and<span class="w"> </span>$env<span class="p">:</span>APPVEYOR_BUILD_NUMBER<span class="w"> </span>-ne<span class="w"> </span>((Invoke-RestMethod<span class="w"> </span>`<span class="w">
+</span><span class="w">      </span>https<span class="p">:</span>//ci.appveyor.com/api/projects/$env<span class="p">:</span>APPVEYOR_ACCOUNT_NAME/$env<span class="p">:</span>APPVEYOR_PROJECT_SLUG/history<span class="p">?</span>recordsNumber=<span class="m">50</span>).builds<span class="w"> </span><span class="sd">| `
+</span><span class="sd">      Where-Object pullRequestId -eq $env:APPVEYOR_PULL_REQUEST_NUMBER)[0].buildNumber) { `
+</span><span class="sd">      throw &#34;There are newer queued builds for this pull request, failing early.&#34; }
+</span><span class="sd">  - ECHO &#34;Filesystem root:&#34;
+</span><span class="sd">  - ps: &#34;ls \&#34;C:/\&#34;&#34;
+</span><span class="sd">
+</span><span class="sd">  - ECHO &#34;Installed SDKs:&#34;
+</span><span class="sd">  - ps: &#34;ls \&#34;C:/Program Files/Microsoft SDKs/Windows\&#34;&#34;
+</span><span class="sd">
+</span><span class="sd">  # Install Python (from the official .msi of https://python.org) and pip when
+</span><span class="sd">  # not already installed.
+</span><span class="sd">  - ps: if (-not(Test-Path($env:PYTHON))) { &amp; appveyor\install.ps1 }
+</span><span class="sd">
+</span><span class="sd">  # Prepend newly installed Python to the PATH of this build (this cannot be
+</span><span class="sd">  # done from inside the powershell script as it would require to restart
+</span><span class="sd">  # the parent CMD process).
+</span><span class="sd">  - &#34;SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%&#34;
+</span><span class="sd">  - &#34;python -m pip install --upgrade pip&#34;
+</span><span class="sd">  - &#34;%CMD_IN_ENV% pip install pyinstaller&#34;
+</span><span class="sd">  - &#34;%CMD_IN_ENV% pip install threadpool&#34;</span><span class="w">
+</span><span class="w"></span><span class="c"># 构件脚本</span><span class="w">
+</span><span class="w"></span>build_script<span class="p">:</span><span class="w">
+</span><span class="w">  </span><span class="c"># Build the compiled extension</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>ps<span class="p">:</span><span class="w"> </span><span class="s2">&#34;ls&#34;</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span><span class="s2">&#34;%CMD_IN_ENV% pyinstaller ./convert-ebook.py -F --add-data lib/kindlegen;lib/kindlegen&#34;</span><span class="w">
+</span><span class="w"></span>test_script<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>ps<span class="p">:</span><span class="w"> </span><span class="s2">&#34;ls dist&#34;</span><span class="w">
+</span><span class="w"></span><span class="c"># 如果要发布文件，这里一定配置</span><span class="w">
+</span><span class="w"></span>artifacts<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>path<span class="p">:</span><span class="w"> </span>dist/<span class="cp">*.exe</span><span class="w">
+</span><span class="w"></span>deploy<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>provider<span class="p">:</span><span class="w"> </span>GitHub<span class="w">
+</span><span class="w">    </span>auth_token<span class="p">:</span><span class="w">
+</span><span class="w">      </span>secure<span class="p">:</span><span class="w"> </span>Iw3T58CTmwWRa79KqeIZ/ZE9qXBQD2mTaIa4mK3Hp/4id+igJqEC4GePD5MhCAxS<span class="w">
+</span><span class="w">    </span>prerelease<span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+</span><span class="w">    </span><span class="c"># 多构件环境下需要为true</span><span class="w">
+</span><span class="w">    </span>force_update<span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">    </span><span class="c"># 发布条件</span><span class="w">
+</span><span class="w">    </span>on<span class="p">:</span><span class="w">
+</span><span class="w">      </span><span class="c"># 存在tag时，才能上传。这个和master是冲突的，配置时二选一</span><span class="w">
+</span><span class="w">      </span>APPVEYOR_REPO_TAG<span class="p">:</span><span class="w"> </span><span class="kc">true</span></code></pre></div>
+<h3 id="多构件组合">多构件组合</h3>
+
+<p>我是坑过来的。。。。。。最开始的时候没有配置发布时的限制条件<code>deploy.on</code>，push了一次，两个构件构件项目后，会发布到releases。又会重新触发构件事件，然后死循环了。来来回回推了50多个release，一个一个删的我要吐血。</p>
+
+<p>现在说一些配置的关键点
+- 使用git的tag功能，当需要发布的时候，打tag，推送到仓库。构件上传时会根据该次提交的id去匹配对应的tag进行release发布。
+- 打tag要写描述，描述会作为release的描述。<code>git tag release-v1.0.0 -m &quot;tag描述&quot;</code>
+- CI服务要配置在tag事件才能发布
+    - travis-ci  <code>deploy.on.tags: true</code>
+    - appveyor  <code>deploy.on.APPVEYOR_REPO_TAG: true</code>
+- 发布时要打开强制上传，不能存在releases就失败了。
+    - travis-ci  <code>deploy.overwrite: true</code>
+    - appveyor  <code>deploy.force_update: true</code>
+- 不同环境下打包上传的文件名不要相同，否则会覆盖掉</p>
+
+<p>使用appveyor配置上传的文件如下，官方文档描述发布github有坑</p>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># 这里必须配置</span><span class="w">
+</span><span class="w"></span>artifacts<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>path<span class="p">:</span><span class="w"> </span>dist/<span class="cp">*.exe</span><span class="w">
+</span><span class="w">    </span>name<span class="p">:</span><span class="w"> </span>myartifacts<span class="w">
+</span><span class="w"></span>deploy<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>provider<span class="p">:</span><span class="w"> </span>GitHub<span class="w">
+</span><span class="w">    </span><span class="c"># 这里是可选</span><span class="w">
+</span><span class="w">    </span>artifact<span class="p">:</span><span class="w"> </span>myartifacts</code></pre></div>
+<p>这是我发布出来的效果图
+<img src="http://md.yihy.cc/2019-02-24-15510192871334.jpg" alt="-w334" /></p>
+
+<h2 id="结语">结语</h2>
+
+<p>我在这里简单介绍了两种ci的基本配置，主要将怎么组合多种构件共同发布release。
+如果你想了解配置你需要的构建环境，请查看它们的官网文档，里面有不同环境的模板。</p>
+<div class="edit-meta">更新时间 0001-01-01 / 发布时间 0001-01-01<br></div><nav class="pagination"><a class="nav nav-prev" href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/java%E5%9F%BA%E7%A1%80-bean%E7%B1%BB%E5%9F%BA%E6%9C%AC%E6%96%B9%E6%B3%95%E9%87%8D%E5%86%99/" title="类基本方法（toString、hashCode、equals、compareTo）重写"><i class="fas fa-arrow-left" aria-hidden="true"></i> Prev - 类基本方法（toString、hashCode、equals、compareTo）重写</a>
+<a class="nav nav-next" href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/spring-data-jpa-%E6%9F%A5%E8%AF%A2%E5%85%B3%E9%94%AE%E5%AD%97/" title="Spring Data Jpa 查询关键字">Next - Spring Data Jpa 查询关键字 <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+</nav><footer><p class="powered">Powered by <a href="https://gohugo.io">Hugo</a>. Theme by <a href="https://themes.gohugo.io/hugo-theme-techdoc/">TechDoc</a>. Designed by <a href="https://github.com/thingsym/hugo-theme-techdoc">Thingsym</a>.</p>
+</footer>
+</main><div class="sidebar">
+<nav>
+<ul>
+<li class=""><a href="http://www.1move.life/">Home</a></li>
+
+
+
+<li class="parent"><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/">技术文章s</a>
+<ul class="sub-menu">
+<li class=""><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/jsoupjsoup-html%E9%A1%B5%E9%9D%A2%E5%A4%84%E7%90%86%E7%AE%80%E5%8D%95%E7%94%A8%E6%B3%95/">Jsoup  Html页面处理简单用法</a></li>
+<li class=""><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/shiro%E5%A4%9Arealm%E6%97%B6%E6%8C%87%E5%AE%9A%E7%99%BB%E5%BD%95realm/">多Realm时，指定登录Realm</a></li>
+<li class=""><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/java%E5%9F%BA%E7%A1%80-bean%E7%B1%BB%E5%9F%BA%E6%9C%AC%E6%96%B9%E6%B3%95%E9%87%8D%E5%86%99/">类基本方法（toString、hashCode、equals、compareTo）重写</a></li>
+<li class="active"><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/github%E9%A1%B9%E7%9B%AE%E4%BD%BF%E7%94%A8ci%E6%9E%84%E5%BB%BA%E6%8C%87%E5%8D%97/">Github项目使用多CI构建指南</a></li>
+<li class=""><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/spring-data-jpa-%E6%9F%A5%E8%AF%A2%E5%85%B3%E9%94%AE%E5%AD%97/">Spring Data Jpa 查询关键字</a></li>
+<li class=""><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/shiro-filterrealm%E7%BB%91%E5%AE%9A-%E5%A4%9A%E7%99%BB%E9%99%86%E5%85%A5%E5%8F%A3%E5%8C%BA%E5%88%86%E5%89%8D%E5%90%8E%E5%8F%B0/">[Shiro]-filter&amp;realm绑定--多登陆入口，区分前后台</a></li>
+<li class=""><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/shiroshiro%E6%95%B4%E5%90%88spring-boot-%E8%87%AA%E5%8A%A8%E5%8C%96%E9%85%8D%E7%BD%AE/">[Shiro]Shiro整合Spring-Boot-自动化配置</a></li>
+<li class=""><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/tooljquery%E8%A1%A8%E6%A0%BC%E6%8F%92%E4%BB%B6datatables-%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AB%AF%E5%8F%82%E6%95%B0%E8%A7%A3%E6%9E%90%E5%B7%A5%E5%85%B7/">jQuery表格插件DataTables  的服务器端参数解析工具</a></li>
+<li class=""><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/mybatis-maven-%E9%85%8D%E7%BD%AEmybatis%E5%8F%8D%E5%90%91%E7%94%9F%E6%88%90/">配置mybatis反向生成</a></li>
+</ul>
+  
+</li>
+
+<li class=""><a href="/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/">日常问题s</a>
+<ul class="">
+<li class=""><a href="/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/idea%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7idea-%E6%9C%AC%E5%9C%B0%E5%8C%96%E6%8C%87%E5%8D%97-%E7%BF%BB%E8%AF%91%E8%87%AAidea%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/">Idea  本地化指南</a></li>
+<li class=""><a href="/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/%E8%BD%AC%E8%BD%BDthymeleaf%E5%8F%82%E8%80%83%E6%89%8B%E5%86%8C/">[转载]Thymeleaf参考手册.md</a></li>
+<li class=""><a href="/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/osx-%E8%A7%A3%E5%86%B3%E6%B5%81%E6%B0%93%E8%BD%AF%E4%BB%B6mplayx%E5%8F%B3%E4%B8%8A%E8%A7%92%E9%80%9A%E7%9F%A5%E5%B9%BF%E5%91%8A%E9%97%AE%E9%A2%98/">osx 解决右上角通知广告问题</a></li>
+<li class=""><a href="/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/idea%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7idea-%E6%B1%89%E5%8C%96%E4%B8%AD%E6%96%87%E5%8C%96%E6%95%99%E7%A8%8B/">[Idea]开发工具IDEA-汉化(中文化)教程</a></li>
+</ul>
+  
+</li>
+</ul>
+</nav>
+
+
+<div class="sidebar-footer"></div>
+</div>
+</div><a href="#" id="backtothetop-fixed" class="backtothetop"
+ data-backtothetop-duration="600"
+ data-backtothetop-easing="easeOutQuart"
+ data-backtothetop-fixed-fadeIn="1000"
+ data-backtothetop-fixed-fadeOut="1000"
+ data-backtothetop-fixed-bottom="10"
+ data-backtothetop-fixed-right="20">
+<span class="fa-layers fa-fw">
+<i class="fas fa-circle"></i>
+<i class="fas fa-arrow-circle-up"></i>
+</span></a>
+</div>
+</body>
+</html>

@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>[转载]Thymeleaf参考手册.md - 念去去云的博文</title>
+<meta name="description" content="博客小站">
+<meta name="generator" content="Hugo 0.52" />
+<link href="http://www.1move.life/index.xml" rel="alternate" type="application/rss+xml">
+<link rel="canonical" href="http://www.1move.life/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/%E8%BD%AC%E8%BD%BDthymeleaf%E5%8F%82%E8%80%83%E6%89%8B%E5%86%8C/">
+<link rel="stylesheet" href="http://www.1move.life/css/theme.min.css">
+<script src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+<link rel="stylesheet" href="http://www.1move.life/css/chroma.min.css">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="http://www.1move.life/js/functions.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery.easing@1.4.1/jquery.easing.min.js"></script>
+<script src="http://www.1move.life/js/jquery.backtothetop/jquery.backtothetop.min.js"></script></head>
+<body>
+<div class="container"><header>
+<h1>念去去云的博文</h1>
+
+<p class="description">博客小站</p>
+
+</header>
+<div class="menu">
+<nav>
+<ul>
+<li><a href="/links/">友链</a></li>
+<li><a href="/about/">关于</a></li></ul>
+</nav>
+</div>
+<div class="content-container">
+<main><h1>[转载]Thymeleaf参考手册.md</h1>
+
+<p>转载自 <a href="http://blog.csdn.net/zrk1000/article/details/72667478">http://blog.csdn.net/zrk1000/article/details/72667478</a></p>
+
+<h1 id="1-创建-html">1、创建 html</h1>
+
+<pre><code>    &lt;!DOCTYPE html&gt;&lt;html xmlns:th=&quot;http://www.thymeleaf.org&quot;&gt;&lt;/html&gt;
+
+    另外：xmlns:layout=&quot;http://www.ultraq.net.nz/web/thymeleaf/layout&quot;.
+
+    th:* attributes ： 
+
+    layout:* attributes
+</code></pre>
+
+<pre><code>注意：html 中的标签必须严格规范，标签必须闭合，即&lt;div /&gt;技术或者&lt;/div&gt;类似结束
+
+</code></pre>
+
+<h1 id="2-使用文本">2、使用文本</h1>
+
+<table>
+<thead>
+<tr>
+<th align="left">语法</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="left">{home.welcome}</td>
+<td align="left">使用国际化文本,国际化传参直接追加(value…)</td>
+</tr>
+
+<tr>
+<td align="left">${user.name}</td>
+<td align="left">使用会话属性</td>
+</tr>
+
+<tr>
+<td align="left">@{}</td>
+<td align="left"><code>&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; media=&quot;all&quot;href=&quot;../../css/gtvg.css&quot; th:href=&quot;@{/css/gtvg.css}&quot; /&gt;</code></td>
+</tr>
+
+<tr>
+<td align="left">–</td>
+<td align="left">–</td>
+</tr>
+
+<tr>
+<td align="left">${} 中预存对象（表达式中基本对象）</td>
+<td align="left"></td>
+</tr>
+
+<tr>
+<td align="left">param</td>
+<td align="left">获取请求参数，比如${param.name},<a href="http://localhost:8080?name=jeff">http://localhost:8080?name=jeff</a></td>
+</tr>
+
+<tr>
+<td align="left">session</td>
+<td align="left">获取 session 的属性</td>
+</tr>
+
+<tr>
+<td align="left">application</td>
+<td align="left">获取 application 的属性</td>
+</tr>
+
+<tr>
+<td align="left">execInfo</td>
+<td align="left">有两个属性 templateName和 now(是 java 的 Calendar 对象)</td>
+</tr>
+
+<tr>
+<td align="left">ctx</td>
+<td align="left"></td>
+</tr>
+
+<tr>
+<td align="left">vars</td>
+<td align="left"></td>
+</tr>
+
+<tr>
+<td align="left">locale</td>
+<td align="left"></td>
+</tr>
+
+<tr>
+<td align="left">httpServletRequest</td>
+<td align="left"></td>
+</tr>
+
+<tr>
+<td align="left">httpSession</td>
+<td align="left"></td>
+</tr>
+
+<tr>
+<td align="left">–</td>
+<td align="left">–</td>
+</tr>
+
+<tr>
+<td align="left">th扩展标签</td>
+<td align="left"></td>
+</tr>
+
+<tr>
+<td align="left">th:text</td>
+<td align="left">普通字符串</td>
+</tr>
+
+<tr>
+<td align="left">th:utext</td>
+<td align="left">转义文本</td>
+</tr>
+
+<tr>
+<td align="left">th:href</td>
+<td align="left"></td>
+</tr>
+
+<tr>
+<td align="left">th:attr</td>
+<td align="left"><code>&lt;img src=&quot;../../images/gtvglogo.png&quot; th:attr=&quot;src=@{/images/gtvglogo.png},title=#{logo},alt=#{logo}&quot; /&gt;</code></td>
+</tr>
+
+<tr>
+<td align="left">th:with</td>
+<td align="left">定义常量</td>
+</tr>
+
+<tr>
+<td align="left">th:attrappend</td>
+<td align="left"></td>
+</tr>
+
+<tr>
+<td align="left">th:classappend</td>
+<td align="left"></td>
+</tr>
+
+<tr>
+<td align="left">th:styleappend</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+
+<p>其他th标签</p>
+
+<table>
+<thead>
+<tr>
+<th>*</th>
+<th>*</th>
+<th>*</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>th:abbr</td>
+<td>th:accept</td>
+<td>th:accept-charset</td>
+</tr>
+
+<tr>
+<td>th:abbr</td>
+<td>th:accept</td>
+<td>th:accept-charset</td>
+</tr>
+
+<tr>
+<td>th:accesskey</td>
+<td>th:action</td>
+<td>th:align</td>
+</tr>
+
+<tr>
+<td>th:alt</td>
+<td>th:archive</td>
+<td>th:audio</td>
+</tr>
+
+<tr>
+<td>th:autocomplete</td>
+<td>th:axis</td>
+<td>th:background</td>
+</tr>
+
+<tr>
+<td>th:bgcolor</td>
+<td>th:border</td>
+<td>th:cellpadding</td>
+</tr>
+
+<tr>
+<td>th:cellspacing</td>
+<td>th:challenge</td>
+<td>th:charset</td>
+</tr>
+
+<tr>
+<td>th:cite</td>
+<td>th:class</td>
+<td>th:classid</td>
+</tr>
+
+<tr>
+<td>th:codebase</td>
+<td>th:codetype</td>
+<td>th:cols</td>
+</tr>
+
+<tr>
+<td>th:colspan</td>
+<td>th:compact</td>
+<td>th:content</td>
+</tr>
+
+<tr>
+<td>th:contenteditable</td>
+<td>th:contextmenu</td>
+<td>th:data</td>
+</tr>
+
+<tr>
+<td>th:datetime</td>
+<td>th:dir</td>
+<td>th:draggable</td>
+</tr>
+
+<tr>
+<td>th:dropzone</td>
+<td>th:enctype</td>
+<td>th:for</td>
+</tr>
+
+<tr>
+<td>th:form</td>
+<td>th:formaction</td>
+<td>th:formenctype</td>
+</tr>
+
+<tr>
+<td>th:formmethod</td>
+<td>th:formtarget</td>
+<td>th:frame</td>
+</tr>
+
+<tr>
+<td>th:frameborder</td>
+<td>th:headers</td>
+<td>th:height</td>
+</tr>
+
+<tr>
+<td>th:high</td>
+<td>th:href</td>
+<td>th:hreflang</td>
+</tr>
+
+<tr>
+<td>th:hspace</td>
+<td>th:http-equiv</td>
+<td>th:icon</td>
+</tr>
+
+<tr>
+<td>th:id</td>
+<td>th:keytype</td>
+<td>th:kind</td>
+</tr>
+
+<tr>
+<td>th:label</td>
+<td>th:lang</td>
+<td>th:list</td>
+</tr>
+
+<tr>
+<td>th:longdesc</td>
+<td>th:low</td>
+<td>th:manifest</td>
+</tr>
+
+<tr>
+<td>th:marginheight</td>
+<td>th:marginwidth</td>
+<td>th:max</td>
+</tr>
+
+<tr>
+<td>th:maxlength</td>
+<td>th:media</td>
+<td>th:method</td>
+</tr>
+
+<tr>
+<td>th:min</td>
+<td>th:name</td>
+<td>th:optimum</td>
+</tr>
+
+<tr>
+<td>th:pattern</td>
+<td>th:placeholder</td>
+<td>th:poster</td>
+</tr>
+
+<tr>
+<td>th:preload</td>
+<td>th:radiogroup</td>
+<td>th:rel</td>
+</tr>
+
+<tr>
+<td>th:rev</td>
+<td>th:rows</td>
+<td>th:rowspan</td>
+</tr>
+
+<tr>
+<td>th:rules</td>
+<td>th:sandbox</td>
+<td>th:scheme</td>
+</tr>
+
+<tr>
+<td>th:scope</td>
+<td>th:scrolling</td>
+<td>th:size</td>
+</tr>
+
+<tr>
+<td>th:sizes</td>
+<td>th:span</td>
+<td>th:spellcheck</td>
+</tr>
+
+<tr>
+<td>th:src</td>
+<td>th:srclang</td>
+<td>th:standby</td>
+</tr>
+
+<tr>
+<td>th:start</td>
+<td>th:step</td>
+<td>th:style</td>
+</tr>
+
+<tr>
+<td>th:summary</td>
+<td>th:tabindex</td>
+<td>th:target</td>
+</tr>
+
+<tr>
+<td>th:title</td>
+<td>th:type</td>
+<td>th:usemap</td>
+</tr>
+
+<tr>
+<td>th:value</td>
+<td>th:valuetype</td>
+<td>th:vspace</td>
+</tr>
+
+<tr>
+<td>th:width</td>
+<td>th:wrap</td>
+<td>th:xmlbase</td>
+</tr>
+
+<tr>
+<td>th:xmllang</td>
+<td>th:xmlspace</td>
+<td>th:alt-title 或th:lang-xmllang（如果其中两个属性值相同）</td>
+</tr>
+</tbody>
+</table>
+
+<p>对于 html5 元素名称的另一种友好写法</p>
+
+<pre><code>&lt;table&gt;
+    &lt;tr data-th-each=&quot;user : ${users}&quot;&gt;
+    &lt;td data-th-text=&quot;${user.login}&quot;&gt;...&lt;/td&gt;
+    &lt;td data-th-text=&quot;${user.name}&quot;&gt;...&lt;/td&gt; &lt;/tr&gt;
+&lt;/table&gt;
+</code></pre>
+
+<h1 id="3-表达式语法">3、表达式语法</h1>
+
+<h2 id="1-简单表达式语法">1、简单表达式语法</h2>
+
+<ul>
+<li><code>#{...}</code> : Message 表达式</li>
+</ul>
+
+<pre><code>&lt;p th:utext=&quot;#{home.welcome(${session.user.name})}&quot;&gt; Welcome to our grocery store, Sebastian Pepper!&lt;/p&gt;
+&lt;p th:utext=&quot;#{${welcomeMsgKey}(${session.user.name})}&quot;&gt; Welcome to our grocery store, Sebastian Pepper!&lt;/p&gt; 
+</code></pre>
+
+<ul>
+<li><code>${}</code>:变量表达式</li>
+</ul>
+
+<pre><code>ongl标准语法，方法也可以被调用
+</code></pre>
+
+<ul>
+<li><code>*{}</code> ：选择变量表达式</li>
+</ul>
+
+<pre><code>&lt;div th:object=&quot;${session.user}&quot;&gt;
+    &lt;p&gt;Name: &lt;span th:text=&quot;*{firstName}&quot;&gt;Sebastian&lt;/span&gt;.&lt;/p&gt;
+    &lt;p&gt;Surname: &lt;span th:text=&quot;*{lastName}&quot;&gt;Pepper&lt;/span&gt;.&lt;/p&gt; 
+    &lt;p&gt;Nationality: &lt;span th:text={nationality}&quot;&gt;Saturn&lt;/span&gt;.&lt;/p&gt;
+&lt;/div&gt; 
+等价于
+&lt;div&gt;
+    &lt;p&gt;Name: &lt;span th:text=&quot;${session.user.firstName}&quot;&gt;Sebastian&lt;/span&gt;.&lt;/p&gt; 
+    &lt;p&gt;Surname: &lt;span th:text=&quot;${session.user.lastName}&quot;&gt;Pepper&lt;/span&gt;.&lt;/p&gt; 
+    &lt;p&gt;Nationality: &lt;span th:text=&quot;${session.user.nationality}&quot;&gt;Saturn&lt;/span&gt;.&lt;/p&gt;
+&lt;/div&gt;
+当然了，这两者可以混合使用
+还有一种方式
+&lt;div&gt;
+    &lt;p&gt;Name: &lt;span th:text=&quot;*{session.user.name}&quot;&gt;Sebastian&lt;/span&gt;.&lt;/p&gt; 
+    &lt;p&gt;Surname: &lt;span th:text=&quot;*{session.user.surname}&quot;&gt;Pepper&lt;/span&gt;.&lt;/p&gt; 
+    &lt;p&gt;Nationality: &lt;span th:text=&quot;*{session.user.nationality}&quot;&gt;Saturn&lt;/span&gt;.&lt;/p&gt;
+&lt;/div&gt;  
+</code></pre>
+
+<ul>
+<li><code>@{}</code>: 链接 URL 表达式</li>
+</ul>
+
+<pre><code>&lt;!-- Will produce 'http://localhost:8080/gtvg/order/details?orderId=3' (plus rewriting) --&gt; &lt;a href=&quot;details.html&quot;
+
+th:href=&quot;@{http://localhost:8080/gtvg/order/details(orderId=${o.id})}&quot;&gt;view&lt;/a&gt; &lt;!-- Will produce '/gtvg/order/details?orderId=3' (plus rewriting) --&gt;
+
+&lt;a href=&quot;details.html&quot; th:href=&quot;@{/order/details(orderId=${o.id})}&quot;&gt;view&lt;/a&gt;
+
+&lt;!-- Will produce '/gtvg/order/3/details' (plus rewriting) --&gt;
+
+&lt;a href=&quot;details.html&quot; th:href=&quot;@{/order/{orderId}/details(orderId=${o.id})}&quot;&gt;view&lt;/a&gt;
+</code></pre>
+
+<h2 id="2-变量">2、变量</h2>
+
+<table>
+<thead>
+<tr>
+<th>分类</th>
+<th>示例</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>文本</td>
+<td>‘one text’ , ‘Another one!’ ,…</td>
+</tr>
+
+<tr>
+<td>数字</td>
+<td>0 , 34 , 3.0 , 12.3 ,…</td>
+</tr>
+
+<tr>
+<td>真假</td>
+<td>true , false</td>
+</tr>
+
+<tr>
+<td>文字符号</td>
+<td>one , sometext , main ,…</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="3-字符连接">3、字符连接</h2>
+
+<table>
+<thead>
+<tr>
+<th>分类</th>
+<th>示例</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>+</td>
+<td>‘The name is ‘+${name}</td>
+</tr>
+
+<tr>
+<td></td>
+<td>…</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="4-算数运算">4、 算数运算</h2>
+
+<table>
+<thead>
+<tr>
+<th>语法</th>
+<th>示例</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>+, -, *, /, %</td>
+<td>二元运算符</td>
+</tr>
+
+<tr>
+<td>-</td>
+<td>减号（一元运算符）</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="5-真假运算">5、 真假运算</h2>
+
+<table>
+<thead>
+<tr>
+<th>分类</th>
+<th>示例</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>and , or</td>
+<td>二元运算符</td>
+</tr>
+
+<tr>
+<td>! , not</td>
+<td>否定（一元运算符）</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="6-比较运算">6、比较运算</h2>
+
+<table>
+<thead>
+<tr>
+<th>分类</th>
+<th>示例</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>&gt;, &lt;, &gt;=, &lt;= (gt, lt, ge, le)</td>
+<td>比较</td>
+</tr>
+
+<tr>
+<td>== , != ( eq , ne )</td>
+<td>平等</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="7-条件运算">7、 条件运算</h2>
+
+<table>
+<thead>
+<tr>
+<th>分类</th>
+<th>示例</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>if-then</td>
+<td>(if) ? (then)</td>
+</tr>
+
+<tr>
+<td>if-then-else</td>
+<td>(if) ? (then) : (else)</td>
+</tr>
+
+<tr>
+<td>Default</td>
+<td>(value) ?: (defaultvalue)</td>
+</tr>
+</tbody>
+</table>
+
+<p>综合示例：</p>
+
+<pre><code>'User is of type ' + (${user.isAdmin()} ? 'Administrator' : (${user.type} ?: 'Unknown'))
+</code></pre>
+
+<h1 id="4-表达式中使用内置对象">4、表达式中使用内置对象</h1>
+
+<pre><code>#dates :
+
+utility methods for java.util.Date objects: formatting, component extraction, etc. #calendars : analogous to #dates , but for java.util.Calendar objects.
+
+#numbers :
+utility methods for formatting numeric objects.
+
+#strings : 
+utility methods for String objects: contains, startsWith, prepending/appending, etc. #objects : utility methods for objects in general.
+
+#bools : 
+utility methods for boolean evaluation. #arrays : utility methods for arrays.
+
+#lists :
+utility methods for lists.
+
+#sets : 
+utility methods for sets.
+
+#maps : 
+utility methods for maps.
+
+#aggregates : 
+utility methods for creating aggregates on arrays or collections.
+
+#messages : 
+utility methods for obtaining externalized messages inside variables expressions, in the same way as they would be obtained using #{...} syntax.
+
+#ids : 
+utility methods for dealing with id attributes that might be repeated (for example, as a result of an iteration).
+</code></pre>
+
+<h1 id="5-预处理">5、预处理</h1>
+
+<pre><code>__${expression}__
+</code></pre>
+
+<h1 id="6-循环">6、循环</h1>
+
+<pre><code>&lt;tr th:each=&quot;prod : ${prods}&quot;&gt;
+    &lt;td th:text=&quot;${prod.name}&quot;&gt;Onions&lt;/td&gt;
+    &lt;td th:text=&quot;${prod.price}&quot;&gt;2.41&lt;/td&gt;
+    &lt;td th:text=&quot;${prod.inStock}? #{true} : #{false}&quot;&gt;yes&lt;/td&gt;
+&lt;/tr&gt;
+
+迭代器的状态
+index: 当前的索引，从0开始
+count: 当前的索引，从1开始
+size：总数
+current:
+even/odd:
+first
+last
+&lt;table&gt; 
+    &lt;tr&gt;
+        &lt;th&gt;NAME&lt;/th&gt;
+        &lt;th&gt;PRICE&lt;/th&gt;
+        &lt;th&gt;IN STOCK&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;tr th:each=&quot;prod,iterStat : ${prods}&quot; th:class=&quot;${iterStat.odd}? 'odd'&quot;&gt;
+    &lt;td th:text=&quot;${prod.name}&quot;&gt;Onions&lt;/td&gt;
+    &lt;td th:text=&quot;${prod.price}&quot;&gt;2.41&lt;/td&gt;
+    &lt;td th:text=&quot;${prod.inStock}? #{true} : #{false}&quot;&gt;yes&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+</code></pre>
+
+<h1 id="7-判断">7、判断</h1>
+
+<pre><code>
+if
+
+&lt;a href=&quot;comments.html&quot; th:href=&quot;@{/product/comments(prodId=${prod.id})}&quot; th:if=&quot;${not #lists.isEmpty(prod.comments)}&quot;&gt;view&lt;/a&gt;
+
+unless
+
+&lt;a href=&quot;comments.html&quot; th:href=&quot;@{/comments(prodId=${prod.id})}&quot; th:unless=&quot;${#lists.isEmpty(prod.comments)}&quot;&gt;view&lt;/a&gt;
+
+switch
+
+&lt;div th:switch=&quot;${user.role}&quot;&gt;
+    &lt;p th:case=&quot;'admin'&quot;&gt;User is an administrator&lt;/p&gt; &lt;p th:case=&quot;#{roles.manager}&quot;&gt;User is a manager&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div th:switch=&quot;${user.role}&quot;&gt;
+    &lt;p th:case=&quot;'admin'&quot;&gt;User is an administrator&lt;/p&gt; &lt;p th:case=&quot;#{roles.manager}&quot;&gt;User is a manager&lt;/p&gt; &lt;p th:case=&quot;*&quot;&gt;User is some other thing&lt;/p&gt;
+&lt;/div&gt;
+</code></pre>
+
+<h1 id="8-模板布局">8、模板布局</h1>
+
+<pre><code>th:fragment
+
+示例
+
+templates/footer.html
+
+&lt;!DOCTYPE html SYSTEM &quot;http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd&quot;&gt; 
+&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;
+    &lt;body&gt;
+         &lt;div th:fragment=&quot;copy&quot;&gt;
+            © 2011 The Good Thymes Virtual Grocery
+         &lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+
+templates/index.html中使用
+
+    &lt;body&gt; ...
+        &lt;div th:include=&quot;footer :: copy&quot;&gt;&lt;/div&gt; 
+    &lt;/body&gt;
+
+或者
+    ...
+    &lt;div id=&quot;copy-section&quot;&gt;
+        © 2011 The Good Thymes Virtual Grocery 
+    &lt;/div&gt;
+    ...
+
+使用
+
+    &lt;body&gt; ...
+        &lt;div th:include=&quot;footer :: #copy-section&quot;&gt;&lt;/div&gt;
+    &lt;/body&gt;
+
+th:include 和 th:replace 区别
+
+th:include 加入代码
+
+th:replace 替换代码
+
+模板传参：参数传递顺序不强制
+
+    定义
+
+&lt;div th:fragment=&quot;frag (onevar,twovar)&quot;&gt;
+    &lt;p th:text=&quot;${onevar} + ' - ' + ${twovar}&quot;&gt;...&lt;/p&gt;
+&lt;/div&gt;
+
+    使用
+
+&lt;div th:include=&quot;::frag (${value1},${value2})&quot;&gt;...&lt;/div&gt;
+
+&lt;div th:include=&quot;::frag (onevar=${value1},twovar=${value2})&quot;&gt;...&lt;/div&gt; 
+等价于 &lt;div th:include=&quot;::frag&quot; th:with=&quot;onevar=${value1},twovar=${value2}&quot;&gt;）
+</code></pre>
+
+<h1 id="9-移除标签-th-remove">9、移除标签 th:remove</h1>
+
+<p>取值范围</p>
+
+<ul>
+<li><p>all：移除所有</p></li>
+
+<li><p>body：不移除自己，但移除他的子标签</p></li>
+
+<li><p>tag: 只移除自己，不移除他的子标签</p></li>
+
+<li><p>all-but-first：移除所有内容除第一个外</p></li>
+
+<li><p>none：啥都不做</p></li>
+</ul>
+
+<h1 id="10-执行顺序">10、执行顺序</h1>
+
+<p><img src="http://img.blog.csdn.net/20170523224321684?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvenJrMTAwMA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述" /></p>
+
+<h1 id="11-thymeleaf注释语法">11、thymeleaf注释语法</h1>
+
+<ul>
+<li>html 看不到，并且 thymeleaf 不会执行</li>
+</ul>
+
+<pre><code>&lt;!--/* This code will be removed at thymeleaf parsing time! */--&gt;
+</code></pre>
+
+<ul>
+<li>and 未运行可以在 html 中看到，运行后就消失</li>
+</ul>
+
+<pre><code>&lt;!--/*--&gt;
+   &lt;div&gt;you can see me only before thymeleaf processes me! &lt;/div&gt;
+&lt;!--*/--&gt;
+</code></pre>
+
+<ul>
+<li>运行后才会看到</li>
+</ul>
+
+<pre><code>&lt;span&gt;hello!&lt;/span&gt;
+&lt;!--/*/
+&lt;div th:text=&quot;${true}&quot;&gt;...&lt;/div&gt;
+/*/--&gt;
+&lt;span&gt;goodbye!&lt;/span&gt;
+</code></pre>
+
+<h1 id="12-th-block-的使用">12、th:block 的使用</h1>
+
+<pre><code>&lt;table&gt;
+    &lt;th:block th:each=&quot;user : ${users}&quot;&gt;
+    &lt;tr&gt;
+        &lt;td th:text=&quot;${user.login}&quot;&gt;...&lt;/td&gt; &lt;td th:text=&quot;${user.name}&quot;&gt;...&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td colspan=&quot;2&quot; th:text=&quot;${user.address}&quot;&gt;...&lt;/td&gt; 
+    &lt;/tr&gt;
+    &lt;/th:block&gt;
+&lt;/table&gt;
+</code></pre>
+
+<p>推荐下面写法（编译前看不见）</p>
+
+<pre><code>&lt;table&gt;
+    &lt;tr&gt;
+        &lt;td th:text=&quot;${user.login}&quot;&gt;...&lt;/td&gt;
+        &lt;td th:text=&quot;${user.name}&quot;&gt;...&lt;/td&gt; &lt;/tr&gt;
+        &lt;tr&gt;
+        &lt;td colspan=&quot;2&quot; th:text=&quot;${user.address}&quot;&gt;...&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;!--/*/ &lt;/th:block&gt; /*/--&gt; 
+&lt;/table&gt;
+</code></pre>
+
+<h1 id="13-文本内联th-inline">13、文本内联th:inline</h1>
+
+<p>th:inline 可以等于 text , javascript(dart) , none</p>
+
+<ul>
+<li>text: [[…]]</li>
+</ul>
+
+<pre><code>&lt;p th:inline=&quot;text&quot;&gt;Hello, [[#{test}]]&lt;/p&gt;
+</code></pre>
+
+<ul>
+<li>javascript: /<em>[[…]]</em>/</li>
+</ul>
+
+<pre><code>&lt;script th:inline=&quot;javascript&quot;&gt;
+    var username = /*[[
+        #{test}
+    ]]*/;
+    var name = /*[[
+        ${param.name[0]}+${execInfo.templateName}+'-'+${#dates.createNow()}+'-'+${#locale}
+    ]]*/;
+&lt;/script&gt;
+</code></pre>
+
+<pre><code>&lt;script th:inline=&quot;javascript&quot;&gt;
+
+/*&lt;![CDATA[*/
+
+    var username = [[#{test}]];
+
+    var name = [[${param.name[0]}+${execInfo.templateName}+'-'+${#dates.createNow()}+'-'+${#locale}]];
+
+/*]]&gt;*/
+
+&lt;/script&gt;
+</code></pre>
+
+<ul>
+<li>adding code: /* [+…+]*/</li>
+</ul>
+
+<pre><code>var x = 23;
+/*[+
+var msg = 'Hello, ' + [[${session.user.name}]]; +]*/
+var f = function() {
+...
+</code></pre>
+
+<ul>
+<li>removind code: /<em>[-</em> / and /* -]*/</li>
+</ul>
+
+<pre><code>var x = 23;
+/*[- */
+var msg = 'This is a non-working template'; /* -]*/
+var f = function() {
+...
+</code></pre>
+
+<h1 id="14-验证模板的正确性">14、验证模板的正确性</h1>
+
+<pre><code>&lt;!DOCTYPE html SYSTEM &quot;http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd&quot;&gt;
+&lt;!DOCTYPE html SYSTEM &quot;http://www.thymeleaf.org/dtd/xhtml1-transitional-thymeleaf-4.dtd&quot;&gt;
+&lt;!DOCTYPE html SYSTEM &quot;http://www.thymeleaf.org/dtd/xhtml1-frameset-thymeleaf-4.dtd&quot;&gt;
+&lt;!DOCTYPE html SYSTEM &quot;http://www.thymeleaf.org/dtd/xhtml11-thymeleaf-4.dtd&quot;&gt;
+</code></pre>
+
+<h1 id="15-特殊用法展示">15、特殊用法展示</h1>
+
+<pre><code>&lt;td th:text=&quot;${#aggregates.sum(o.orderLines.{purchasePrice * amount})}&quot;&gt;23.32&lt;/td&gt;
+</code></pre>
+
+<p>以上表示List orderLines的所有订单的总价</p>
+
+<h1 id="附件a-基础对象">附件A: 基础对象</h1>
+
+<p>ctx：对应org.thymeleaf.spring[3|4].context.SpringWebContext</p>
+
+<pre><code>/*
+* ======================================================================
+* See javadoc API for class org.thymeleaf.context.IContext
+* ====================================================================== */
+${#ctx.locale} ${#ctx.variables}
+/*
+* ======================================================================
+* See javadoc API for class org.thymeleaf.context.IWebContext
+* ====================================================================== */
+${#ctx.applicationAttributes} 
+${#ctx.httpServletRequest} 
+${#ctx.httpServletResponse} 
+${#ctx.httpSession} 
+${#ctx.requestAttributes} 
+${#ctx.requestParameters} 
+${#ctx.servletContext} 
+${#ctx.sessionAttributes}
+</code></pre>
+
+<p>locale: 对应java.util.Locale</p>
+
+<p>vars: 对应 org.thymeleaf.context.VariablesMap</p>
+
+<pre><code>/*
+* ====================================================================== * See javadoc API for class org.thymeleaf.context.VariablesMap
+* ====================================================================== */
+${#vars.get('foo')} 
+${#vars.containsKey('foo')} 
+${#vars.size()}
+...
+</code></pre>
+
+<p>param</p>
+
+<p><code>${param.foo} 是一个 String[] 如果要获取需要${param.foo[0]}</code></p>
+
+<pre><code>/*
+* ============================================================================ * See javadoc API for class org.thymeleaf.context.WebRequestParamsVariablesMap * ============================================================================ */
+${param.foo} // Retrieves a String[] with the values of request parameter 'foo' 
+${param.size()}
+${param.isEmpty()}
+${param.containsKey('foo')}
+...
+</code></pre>
+
+<p>session</p>
+
+<p>application</p>
+
+<p>httpServletRequest</p>
+
+<p>themes : as JSP tag spring:theme</p>
+
+<p>Spring Beans 的访问</p>
+
+<pre><code>&lt;div th:text=&quot;${@authService.getUserName()}&quot;&gt;...&lt;/div&gt;
+</code></pre>
+
+<h1 id="附件b-工具对象">附件B:工具对象</h1>
+
+<ul>
+<li><p>dates See javadoc API for class org.thymeleaf.expression.Dates</p></li>
+
+<li><p>calendars See javadoc API for class org.thymeleaf.expression.Calendars</p></li>
+
+<li><p>numbers See javadoc API for class org.thymeleaf.expression.Numbers</p></li>
+
+<li><p>strings See javadoc API for class org.thymeleaf.expression.Strings</p></li>
+
+<li><p>objects See javadoc API for class org.thymeleaf.expression.Objects</p></li>
+
+<li><p>bools See javadoc API for class org.thymeleaf.expression.Bools</p></li>
+
+<li><p>arrays See javadoc API for class org.thymeleaf.expression.Arrays</p></li>
+
+<li><p>lists See javadoc API for class org.thymeleaf.expression.Lists</p></li>
+
+<li><p>sets See javadoc API for class org.thymeleaf.expression.Sets</p></li>
+
+<li><p>maps See javadoc API for class org.thymeleaf.expression.Maps</p></li>
+
+<li><p>aggregates See javadoc API for class org.thymeleaf.expression.Aggregates</p></li>
+
+<li><p>messages See javadoc API for class org.thymeleaf.expression.Messages</p></li>
+
+<li><p>ids See javadoc API for class org.thymeleaf.expression.Ids</p></li>
+</ul>
+
+<h1 id="附件c-dom-选择器语法">附件C:DOM 选择器语法</h1>
+
+<p>DOM选择器借语法功能从XPath，CSS和jQuery，为了提供一个功能强大且易于使用的方法来指定模板片段</p>
+
+<pre><code>&lt;div th:include=&quot;mytemplate :: [//div[@class='content']]&quot;&gt;...&lt;/div&gt;
+</code></pre>
+
+<pre><code>&lt;div th:include=&quot;mytemplate :: [div.content]&quot;&gt;...&lt;/div&gt;
+</code></pre>
+<div class="edit-meta">更新时间 2017-11-26 / 发布时间 2017-11-26<br></div><nav class="pagination"><a class="nav nav-prev" href="/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/idea%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7idea-%E6%9C%AC%E5%9C%B0%E5%8C%96%E6%8C%87%E5%8D%97-%E7%BF%BB%E8%AF%91%E8%87%AAidea%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/" title="Idea  本地化指南"><i class="fas fa-arrow-left" aria-hidden="true"></i> Prev - Idea  本地化指南</a>
+<a class="nav nav-next" href="/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/osx-%E8%A7%A3%E5%86%B3%E6%B5%81%E6%B0%93%E8%BD%AF%E4%BB%B6mplayx%E5%8F%B3%E4%B8%8A%E8%A7%92%E9%80%9A%E7%9F%A5%E5%B9%BF%E5%91%8A%E9%97%AE%E9%A2%98/" title="osx 解决右上角通知广告问题">Next - osx 解决右上角通知广告问题 <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+</nav><footer><p class="powered">Powered by <a href="https://gohugo.io">Hugo</a>. Theme by <a href="https://themes.gohugo.io/hugo-theme-techdoc/">TechDoc</a>. Designed by <a href="https://github.com/thingsym/hugo-theme-techdoc">Thingsym</a>.</p>
+</footer>
+</main><div class="sidebar">
+<nav>
+<ul>
+<li class=""><a href="http://www.1move.life/">Home</a></li>
+
+
+
+<li class=""><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/">技术文章s</a>
+<ul class="">
+<li class=""><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/jsoupjsoup-html%E9%A1%B5%E9%9D%A2%E5%A4%84%E7%90%86%E7%AE%80%E5%8D%95%E7%94%A8%E6%B3%95/">Jsoup  Html页面处理简单用法</a></li>
+<li class=""><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/shiro%E5%A4%9Arealm%E6%97%B6%E6%8C%87%E5%AE%9A%E7%99%BB%E5%BD%95realm/">多Realm时，指定登录Realm</a></li>
+<li class=""><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/java%E5%9F%BA%E7%A1%80-bean%E7%B1%BB%E5%9F%BA%E6%9C%AC%E6%96%B9%E6%B3%95%E9%87%8D%E5%86%99/">类基本方法（toString、hashCode、equals、compareTo）重写</a></li>
+<li class=""><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/github%E9%A1%B9%E7%9B%AE%E4%BD%BF%E7%94%A8ci%E6%9E%84%E5%BB%BA%E6%8C%87%E5%8D%97/">Github项目使用多CI构建指南</a></li>
+<li class=""><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/spring-data-jpa-%E6%9F%A5%E8%AF%A2%E5%85%B3%E9%94%AE%E5%AD%97/">Spring Data Jpa 查询关键字</a></li>
+<li class=""><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/shiro-filterrealm%E7%BB%91%E5%AE%9A-%E5%A4%9A%E7%99%BB%E9%99%86%E5%85%A5%E5%8F%A3%E5%8C%BA%E5%88%86%E5%89%8D%E5%90%8E%E5%8F%B0/">[Shiro]-filter&amp;realm绑定--多登陆入口，区分前后台</a></li>
+<li class=""><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/shiroshiro%E6%95%B4%E5%90%88spring-boot-%E8%87%AA%E5%8A%A8%E5%8C%96%E9%85%8D%E7%BD%AE/">[Shiro]Shiro整合Spring-Boot-自动化配置</a></li>
+<li class=""><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/tooljquery%E8%A1%A8%E6%A0%BC%E6%8F%92%E4%BB%B6datatables-%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AB%AF%E5%8F%82%E6%95%B0%E8%A7%A3%E6%9E%90%E5%B7%A5%E5%85%B7/">jQuery表格插件DataTables  的服务器端参数解析工具</a></li>
+<li class=""><a href="/%E6%8A%80%E6%9C%AF%E6%96%87%E7%AB%A0/mybatis-maven-%E9%85%8D%E7%BD%AEmybatis%E5%8F%8D%E5%90%91%E7%94%9F%E6%88%90/">配置mybatis反向生成</a></li>
+</ul>
+  
+</li>
+
+<li class="parent"><a href="/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/">日常问题s</a>
+<ul class="sub-menu">
+<li class=""><a href="/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/idea%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7idea-%E6%9C%AC%E5%9C%B0%E5%8C%96%E6%8C%87%E5%8D%97-%E7%BF%BB%E8%AF%91%E8%87%AAidea%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3/">Idea  本地化指南</a></li>
+<li class="active"><a href="/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/%E8%BD%AC%E8%BD%BDthymeleaf%E5%8F%82%E8%80%83%E6%89%8B%E5%86%8C/">[转载]Thymeleaf参考手册.md</a></li>
+<li class=""><a href="/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/osx-%E8%A7%A3%E5%86%B3%E6%B5%81%E6%B0%93%E8%BD%AF%E4%BB%B6mplayx%E5%8F%B3%E4%B8%8A%E8%A7%92%E9%80%9A%E7%9F%A5%E5%B9%BF%E5%91%8A%E9%97%AE%E9%A2%98/">osx 解决右上角通知广告问题</a></li>
+<li class=""><a href="/%E6%97%A5%E5%B8%B8%E9%97%AE%E9%A2%98/idea%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7idea-%E6%B1%89%E5%8C%96%E4%B8%AD%E6%96%87%E5%8C%96%E6%95%99%E7%A8%8B/">[Idea]开发工具IDEA-汉化(中文化)教程</a></li>
+</ul>
+  
+</li>
+</ul>
+</nav>
+
+
+<div class="sidebar-footer"></div>
+</div>
+</div><a href="#" id="backtothetop-fixed" class="backtothetop"
+ data-backtothetop-duration="600"
+ data-backtothetop-easing="easeOutQuart"
+ data-backtothetop-fixed-fadeIn="1000"
+ data-backtothetop-fixed-fadeOut="1000"
+ data-backtothetop-fixed-bottom="10"
+ data-backtothetop-fixed-right="20">
+<span class="fa-layers fa-fw">
+<i class="fas fa-circle"></i>
+<i class="fas fa-arrow-circle-up"></i>
+</span></a>
+</div>
+</body>
+</html>
